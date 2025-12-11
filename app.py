@@ -65,7 +65,9 @@ with tab_structures:
                 top = vals[0]
                 for i in range(1,6):
                     st.session_state[margins_keys[i]] = top
-            margins = [st.session_state[margins_keys[i] for i in range(6)]]
+            
+            #margins = [st.session_state[margins_keys[i] for i in range(6)]]
+            margins = [st.session_state[margins_keys[i]] for i in range(6)]
 
 
 
