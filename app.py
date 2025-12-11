@@ -6,8 +6,8 @@ tab_structures, tab_plan = st.tabs(["Auto Structure", "Auto Plan"])
 
 with tab_structures:
     st.header("Create list of structure generation commands")
-    st.form("autoStructureForm", clear_on_submit=True)
-    with st.form("autoStructureForm"):
+    with st.form("autoStructureForm", clear_on_submit=True):
+    #with st.form("autoStructureForm"):
         st.write("Define automation instruction")
         
         # consider if want to limit max characters in text_input? Set at 32 
