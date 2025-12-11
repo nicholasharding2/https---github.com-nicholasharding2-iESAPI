@@ -6,18 +6,14 @@ tab_structures, tab_plan = st.tabs(["Auto Structure", "Auto Plan"])
 
 with tab_structures:
     st.header("Create list of structure generation commands")
-    
+
     with st.form("autoStructureForm", clear_on_submit=True):
         st.write("Define automation instruction")
-        
-        # consider if want to limit max characters in text_input? Set at 32 
-        # for no real reason other than to stop them being really long?
-        # TG263 suggests 16 but I don't think Eclipse stops it
+
+        # Original structure ID
         st.text_input("Original Structure ID", max_chars=32)
-        
-        # now add a combo box to choose the type of command
-        # potential options are: margin (uniform), margin (assymmetric), extract wall, crop, booleans
-        # booleans are AND SUB OR XOR
+
+        # Command selection
         command_options = [
             "Margin for Structure",
             "Extract Wall",
@@ -26,73 +22,61 @@ with tab_structures:
             "Boolean SUB",
             "Boolean OR",
             "Boolean XOR"
-            ]
+        ]
         chosen_command = st.selectbox("Choose a command", command_options)
-        
 
         if chosen_command == "Margin for Structure":
-            # st.write("Not implemented yet")
-            st.radio("Geometry [cm]",["Create outer margin","Create inner margin"])
+            # Geometry choice
+            st.radio("Geometry [cm]", ["Create outer margin", "Create inner margin"])
+
+            # Symmetric checkbox
             sym_margin = st.checkbox("Use symmetrical margin", value=True)
 
-            vals = []
-            # keys list
-            margins_keys = ["Margin X1","Margin X2","Margin Y1","Margin Y2","Margin Z1","Margin Z2"]
+            # Labels and keys
             margins_labels = [
                 "Lat Left (cm)",
-                "Lat right (cm)",
-                "Vert up (cm)",
-                "Vert down (cm)",
-                "Long sup (cm)",
-                "Long inf (cm)"
+                "Lat Right (cm)",
+                "Vert Up (cm)",
+                "Vert Down (cm)",
+                "Long Sup (cm)",
+                "Long Inf (cm)"
             ]
-            # always render the six inputs
+            margins_keys = [
+                "Margin X1", "Margin X2", "Margin Y1",
+                "Margin Y2", "Margin Z1", "Margin Z2"
+            ]
+
+            # Determine initial values
+            top_val = float(st.session_state.get(margins_keys[0], 0.0))
+            if sym_margin:
+                margins_values = [top_val] * 6
+            else:
+                # Keep previous values if they exist
+                margins_values = [float(st.session_state.get(k, 0.0)) for k in margins_keys]
+
+            # Render six numeric inputs
             for i in range(6):
-                v = st.number_input(
+                st.number_input(
                     margins_labels[i],
-                    key = margins_keys[i],
+                    key=margins_keys[i],
+                    value=margins_values[i],
                     min_value=0.0,
                     max_value=5.0,
-                    value=0.0,
-                    format="%0.1f",
                     step=0.1,
-                    disabled=(sym_margin and i>0) # only top active in sym mode
+                    format="%0.1f",
+                    disabled=(sym_margin and i > 0)
                 )
-                vals.append(v)
 
-            # if sym then force all six values to match the top
-            if sym_margin:
-                top = vals[0]
-                for i in range(1,6):
-                    st.session_state[margins_keys[i]] = top
-            
-            #margins = [st.session_state[margins_keys[i] for i in range(6)]]
-            final_margins = [st.session_state[margins_keys[i]] for i in range(6)]
-        
+            # Collect final margins
+            final_margins = [st.session_state[k] for k in margins_keys]
+
+        # ✅ Submit button
         submit = st.form_submit_button("Run")
 
         if submit:
             st.write(f"Command submitted: {chosen_command}")
-
-
-
-            
-
-
-        #elif chosen_command == "Extract Wall":
-         #   st.write("Not implemented yet")
-        #else:
-         #   st.write("Not implemented yet.")
-
-
-
-
-        # every form needs a submit button
-        #submitted = st.form_submit_button("Submit")
-        #if submitted:
-            # TODO: pass stuff over here
-         #   pass
+            if chosen_command == "Margin for Structure":
+                st.write("Margins:", final_margins)
 
 with tab_plan:
-    st.write("To be developed.")
-
+    st.write("In development")
