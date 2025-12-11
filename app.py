@@ -12,20 +12,18 @@ with tab_structures:
 
     # Original structure ID
     orig_structure = st.text_input("Original Structure ID", max_chars=32)
-    target_structure = st.text_input("Target Structure ID", max_chars=32)
+    
 
     # Command selection
     command_options = [
         "Margin for Structure",
         "Extract Wall",
         "Crop",
-        "Boolean",
-        "Boolean AND",
-        "Boolean SUB",
-        "Boolean OR",
-        "Boolean XOR"
+        "Boolean"
     ]
     chosen_command = st.selectbox("Choose a command", command_options)
+
+    target_structure = st.text_input("Target Structure ID", max_chars=32)
 
     if chosen_command == "Margin for Structure":
         # Geometry choice
@@ -116,6 +114,7 @@ with tab_structures:
         crop_direction = st.radio("Remove part",["extending outside","extending inside"])
         crop_structure = st.text_input("Crop Fodder Structure ID", max_chars=32)
         additional_margin = st.number_input(
+            "Additional margin (cm)"
             min_value=0.0,
             max_value=5.0,
             step=0.1,
