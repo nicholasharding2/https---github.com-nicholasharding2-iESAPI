@@ -54,7 +54,7 @@ with tab_structures:
                     key = margins_keys[i],
                     min_value=0.0,
                     max_value=5.0,
-                    value=float,
+                    value=0.0,
                     format="%0.1f",
                     step=0.1,
                     disabled=(sym_margin and i>0) # only top active in sym mode
