@@ -11,7 +11,7 @@ with tab_structures:
     st.write("Define automation instruction")
 
     # Original structure ID
-    st.text_input("Original Structure ID", max_chars=32)
+    orig_structure = st.text_input("Original Structure ID", max_chars=32)
 
     # Command selection
     command_options = [
@@ -85,6 +85,35 @@ with tab_structures:
 
         # Collect final margins
         final_margins = [st.session_state[k] for k in margins_keys]
+
+        margin_avoid = st.checkbox("Avoid structure", key="Margin_Avoid")
+        if not margin_avoid:
+            # Original structure ID
+            st.text_input("Avoid Structure ID", max_chars=32)
+
+
+    elif chosen_command == "Extract Wall":
+        outer_wall_margin = st.number_input(
+            "Outer wall margin (cm)",
+            key = "Outer Wall Margin",
+            min_value=-5.0,
+            max_value=5.0,
+            step=0.1,
+            format="%0.1f",
+            value=0.0
+            )
+        inner_wall_margin = st.number_input(
+            "Inner wall margin (cm)",
+            key = "Inner Wall Margin",
+            min_value=-5.0,
+            max_value=5.0,
+            step=0.1,
+            format="%0.1f",
+            value=0.0
+            )
+        
+
+    target_structure = st.text_input("Target Structure ID", max_chars=32)
 
     # ✅ Submit button
     submit = st.button("Run")
