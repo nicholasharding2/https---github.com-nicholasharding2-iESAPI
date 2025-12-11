@@ -63,9 +63,13 @@ with tab_structures:
         #else:
             # Keep previous values if they exist
          #   margins_values = [float(st.session_state.get(k, 0.0)) for k in margins_keys]
+         # if sym update other session state values before creating the widgets
+         if sym_margin:
+            for i in range(1,6):
+                st.session_state[margins_keys[i]] = top_val
          
 
-        # Render remaining inputs
+        # now Render remaining inputs
         for i in range(1,6):
             value = top_val if sym_margin else float(st.session_state.get(margins_keys[i],0.0))
             st.number_input(
