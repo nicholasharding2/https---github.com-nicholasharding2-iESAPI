@@ -8,7 +8,6 @@ with tab_structures:
     st.header("Create list of structure generation commands")
     
     with st.form("autoStructureForm", clear_on_submit=True):
-    #with st.form("autoStructureForm"):
         st.write("Define automation instruction")
         
         # consider if want to limit max characters in text_input? Set at 32 
@@ -69,6 +68,7 @@ with tab_structures:
             
             #margins = [st.session_state[margins_keys[i] for i in range(6)]]
             final_margins = [st.session_state[margins_keys[i]] for i in range(6)]
+        
         submit = st.form_submit_button("Run")
 
         if submit:
