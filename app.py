@@ -64,7 +64,7 @@ with tab_structures:
             # Keep previous values if they exist
          #   margins_values = [float(st.session_state.get(k, 0.0)) for k in margins_keys]
          # if sym update other session state values before creating the widgets
-         if sym_margin:
+        if sym_margin:
             for i in range(1,6):
                 st.session_state[margins_keys[i]] = top_val
          
