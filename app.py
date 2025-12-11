@@ -71,11 +71,11 @@ with tab_structures:
 
         # now Render remaining inputs
         for i in range(1,6):
-            value = top_val if sym_margin else float(st.session_state.get(margins_keys[i],0.0))
+            #value = top_val if sym_margin else float(st.session_state.get(margins_keys[i],0.0))
             st.number_input(
                 margins_labels[i],
                 key=margins_keys[i],
-                value=value,
+                value=float(st.session_state.get(margins_keys[i],0.0)),
                 min_value=0.0,
                 max_value=5.0,
                 step=0.1,
