@@ -114,7 +114,7 @@ with tab_structures:
         crop_direction = st.radio("Remove part",["extending outside","extending inside"])
         crop_structure = st.text_input("Crop Fodder Structure ID", max_chars=32)
         additional_margin = st.number_input(
-            "Additional margin (cm)"
+            "Additional margin (cm)",
             min_value=0.0,
             max_value=5.0,
             step=0.1,
