@@ -47,24 +47,36 @@ with tab_structures:
         ]
 
         # Determine initial values
-        top_val = float(st.session_state.get(margins_keys[0], 0.0))
-        if sym_margin:
-            margins_values = [top_val] * 6
-        else:
-            # Keep previous values if they exist
-            margins_values = [float(st.session_state.get(k, 0.0)) for k in margins_keys]
+        #top_val = float(st.session_state.get(margins_keys[0], 0.0))
+        top_val = st.number_input(
+            margins_labels[0],
+            key = margins_keys[0],
+            min_value=0.0,
+            max_value=5.0,
+            step=0.1,
+            format="%0.1f",
+            value=float(st.session_state.get(margins_keys[0], 0.0))
+        )
 
-        # Render six numeric inputs
-        for i in range(6):
+        #if sym_margin:
+         #   margins_values = [top_val] * 6
+        #else:
+            # Keep previous values if they exist
+         #   margins_values = [float(st.session_state.get(k, 0.0)) for k in margins_keys]
+         
+
+        # Render remaining inputs
+        for i in range(1,6):
+            value = top_val if sym_margin else float(st.session_state.get(margins_keys[i],0.0))
             st.number_input(
                 margins_labels[i],
                 key=margins_keys[i],
-                value=margins_values[i],
+                value=value,
                 min_value=0.0,
                 max_value=5.0,
                 step=0.1,
                 format="%0.1f",
-                disabled=(sym_margin and i > 0)
+                disabled=(sym_margin)
             )
 
         # Collect final margins
