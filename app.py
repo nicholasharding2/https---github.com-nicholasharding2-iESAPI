@@ -33,7 +33,7 @@ with tab_structures:
         sym_margin = st.checkbox("Use symmetrical margin", value=True)
 
          # Labels and keys
-         margins_labels = [
+        margins_labels = [
             "Lat Left (cm)",
             "Lat Right (cm)",
             "Vert Up (cm)",
