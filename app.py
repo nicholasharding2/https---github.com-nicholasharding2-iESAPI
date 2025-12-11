@@ -12,12 +12,14 @@ with tab_structures:
 
     # Original structure ID
     orig_structure = st.text_input("Original Structure ID", max_chars=32)
+    target_structure = st.text_input("Target Structure ID", max_chars=32)
 
     # Command selection
     command_options = [
         "Margin for Structure",
         "Extract Wall",
         "Crop",
+        "Boolean",
         "Boolean AND",
         "Boolean SUB",
         "Boolean OR",
@@ -111,9 +113,22 @@ with tab_structures:
             format="%0.1f",
             value=0.0
             )
+    elif chosen_command == "Crop":
+        crop_direction = st.radio("Remove part",["extending outside","extending inside"])
+        crop_structure = st.text_input("Crop Fodder Structure ID", max_chars=32)
+        additional_margin = st.number_input(
+            min_value=0.0,
+            max_value=5.0,
+            step=0.1,
+            format="%0.1f",
+            value=0.0
+        )
+    elif chosen_command == "Boolean":
         
+        pass
 
-    target_structure = st.text_input("Target Structure ID", max_chars=32)
+
+    
 
     # ✅ Submit button
     submit = st.button("Run")
