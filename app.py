@@ -124,8 +124,9 @@ with tab_structures:
             value=0.0
         )
     elif chosen_command == "Boolean":
-        
-        pass
+        boolean_options = ["OR","AND","SUB","XOR"]
+        boolean_choice = st.pills("Operator",boolean_options)
+        second_structure = st.text_input("Second Structure ID", max_chars=32)
 
 
     
