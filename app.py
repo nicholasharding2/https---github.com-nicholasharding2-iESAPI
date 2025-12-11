@@ -6,6 +6,7 @@ tab_structures, tab_plan = st.tabs(["Auto Structure", "Auto Plan"])
 
 with tab_structures:
     st.header("Create list of structure generation commands")
+    
     with st.form("autoStructureForm", clear_on_submit=True):
     #with st.form("autoStructureForm"):
         st.write("Define automation instruction")
@@ -67,31 +68,30 @@ with tab_structures:
                     st.session_state[margins_keys[i]] = top
             
             #margins = [st.session_state[margins_keys[i] for i in range(6)]]
-            margins = [st.session_state[margins_keys[i]] for i in range(6)]
+            final_margins = [st.session_state[margins_keys[i]] for i in range(6)]
+        submit = st.form_submit_button("Run")
+
+        if submit:
+            st.write(f"Command submitted: {chosen_command}")
 
 
-
-
-
-            #if (sym_margin):
-             #   x1 = st.number_input("Lat Left (cm)", min_value=0.0, max_value=5.0, value=float, format="%0.1f", step=0.1, key="Margin x1")
 
             
 
 
-        elif chosen_command == "Extract Wall":
-            st.write("Not implemented yet")
-        else:
-            st.write("Not implemented yet.")
+        #elif chosen_command == "Extract Wall":
+         #   st.write("Not implemented yet")
+        #else:
+         #   st.write("Not implemented yet.")
 
 
 
 
         # every form needs a submit button
-        submitted = st.form_submit_button("Submit")
-        if submitted:
+        #submitted = st.form_submit_button("Submit")
+        #if submitted:
             # TODO: pass stuff over here
-            pass
+         #   pass
 
 with tab_plan:
     st.write("To be developed.")
