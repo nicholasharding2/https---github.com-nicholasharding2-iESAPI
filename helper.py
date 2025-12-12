@@ -13,9 +13,8 @@ def margin_group(base_key, labels, symmetric=False):
     )
     vals.append(top_val)
 
-    for i in range(1, 6):
+    for i in range(1, len(labels)):
         if symmetric:
-            # display disabled field mirroring the top value
             st.number_input(
                 labels[i],
                 key=f"{base_key}_{i}",
@@ -39,4 +38,3 @@ def margin_group(base_key, labels, symmetric=False):
             vals.append(v)
 
     return vals
-

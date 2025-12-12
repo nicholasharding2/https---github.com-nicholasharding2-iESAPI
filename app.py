@@ -2,7 +2,7 @@ import streamlit as st
 
 # local imports
 from helper import margin_group
-from commands import build_margin_command
+#from commands import build_margin_command
 
 # initilise commands once
 if "commands" not in st.session_state:
