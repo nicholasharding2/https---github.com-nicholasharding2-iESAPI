@@ -80,7 +80,7 @@ with tab_structures:
             st.number_input(
                 margins_labels[i],
                 key=margins_keys[i],
-                value=defaults[i],
+                value=defaults[i-1],
                 min_value=0.0,
                 max_value=5.0,
                 step=0.1,
