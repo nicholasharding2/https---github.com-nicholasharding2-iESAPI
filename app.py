@@ -1,6 +1,13 @@
 import streamlit as st
 
+# local imports
 from helper import margin_group
+from commands import build_margin_command
+
+# initilise commands once
+if "commands" not in st.session_state:
+    st.session_state.commands = []
+
 
 st.title("Interactive ESAPI Automation Code Generator")
 
@@ -13,7 +20,7 @@ with tab_structures:
     st.write("Define automation instruction")
 
     # Original structure ID
-    orig_structure = st.text_input("Original Structure ID", max_chars=32)
+    orig_structure = st.text_input("Original Structure ID", max_chars=32, key = "original_id")
     
 
     # Command selection
@@ -25,11 +32,13 @@ with tab_structures:
     ]
     chosen_command = st.selectbox("Choose a command", command_options)
 
-    target_structure = st.text_input("Target Structure ID", max_chars=32)
+    target_structure = st.text_input("Target Structure ID", max_chars=32, key = "target_id")
 
     if chosen_command == "Margin for Structure":
         # Geometry choice
-        st.radio("Geometry [cm]", ["Create outer margin", "Create inner margin"])
+        outer_or_inner = st.radio("Geometry [cm]", ["Create outer margin", "Create inner margin"])
+
+        symmetric = st.checkbox("Use symmetrical margin", value=True)
 
         # Symmetric checkbox
         #sym_margin = st.checkbox("Use symmetrical margin", value=True, key="sym_margin")
@@ -44,7 +53,11 @@ with tab_structures:
             "Long Inf (cm)"
         ]
 
-        margins = margin_group("structure_margin", margins_labels)
+        margins = margin_group(
+            base_key = "structure_margin",
+            labels = margins_labels,
+            symmetric=symmetric
+            )
         
 
 

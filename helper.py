@@ -1,48 +1,42 @@
 import streamlit as st
 
-def margin_group(
-    key_prefix: str,
-    labels: list[str],
-    min_value: float = 0.0,
-    max_value: float = 5.0,
-    step: float = 0.1,
-    sym_default: bool = True,
-):
-    """
-    Creates six margin inputs with optional symmetry.
-    
-    Returns:
-        List of six floats in the same order as labels.
-    """
+def margin_group(base_key, labels, symmetric=False):
+    vals = []
 
-    # --- symmetry toggle ---
-    sym_key = f"{key_prefix}_sym"
-    sym = st.checkbox("Use symmetrical margin", value=sym_default, key=sym_key)
+    top_val = st.number_input(
+        labels[0],
+        key=f"{base_key}_0",
+        min_value=0.0,
+        max_value=5.0,
+        step=0.1,
+        format="%0.1f",
+    )
+    vals.append(top_val)
 
-    # Generate 6 keys
-    keys = [f"{key_prefix}_{i}" for i in range(6)]
+    for i in range(1, 6):
+        if symmetric:
+            # display disabled field mirroring the top value
+            st.number_input(
+                labels[i],
+                key=f"{base_key}_{i}",
+                value=top_val,
+                disabled=True,
+                min_value=0.0,
+                max_value=5.0,
+                step=0.1,
+                format="%0.1f",
+            )
+            vals.append(top_val)
+        else:
+            v = st.number_input(
+                labels[i],
+                key=f"{base_key}_{i}",
+                min_value=0.0,
+                max_value=5.0,
+                step=0.1,
+                format="%0.1f",
+            )
+            vals.append(v)
 
-    # Ensure keys exist BEFORE widgets are drawn
-    for k in keys:
-        st.session_state.setdefault(k, 0.0)
+    return vals
 
-    # --- Apply mirroring BEFORE widget creation ---
-    if sym:
-        top = st.session_state[keys[0]]
-        for k in keys[1:]:
-            st.session_state[k] = top
-
-    # --- Draw widgets ---
-    for i, label in enumerate(labels):
-        st.number_input(
-            label,
-            min_value=min_value,
-            max_value=max_value,
-            step=step,
-            key=keys[i],
-            disabled=(sym and i > 0),
-            format="%0.1f",
-        )
-
-    # Return values in order
-    return [st.session_state[k] for k in keys]
