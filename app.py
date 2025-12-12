@@ -55,7 +55,7 @@ with tab_structures:
             max_value=5.0,
             step=0.1,
             format="%0.1f",
-            value=float(st.session_state.get(margins_keys[0], 0.0))
+            #value=float(st.session_state.get(margins_keys[0], 0.0))
         )
 
         #if sym_margin:
@@ -64,10 +64,15 @@ with tab_structures:
             # Keep previous values if they exist
          #   margins_values = [float(st.session_state.get(k, 0.0)) for k in margins_keys]
          # if sym update other session state values before creating the widgets
+        #if sym_margin:
+         #   for i in range(1,6):
+          #      st.session_state[margins_keys[i]] = top_val
         if sym_margin:
+            defaults = [top_val] * 5
+        else:
+            defaults = []
             for i in range(1,6):
-                st.session_state[margins_keys[i]] = top_val
-         
+                defaults.append(st.session_state.get(margins_keys[i],0.0))
 
         # now Render remaining inputs
         for i in range(1,6):
@@ -75,7 +80,7 @@ with tab_structures:
             st.number_input(
                 margins_labels[i],
                 key=margins_keys[i],
-                value=float(st.session_state.get(margins_keys[i],0.0)),
+                value=defaults[i],
                 min_value=0.0,
                 max_value=5.0,
                 step=0.1,
@@ -130,12 +135,15 @@ with tab_structures:
     
 
     # ✅ Submit button
-    submit = st.button("Run")
+    submit = st.button("Add instruction")
 
     if submit:
         st.write(f"Command submitted: {chosen_command}")
         if chosen_command == "Margin for Structure":
             st.write("Margins:", final_margins)
+
+    # to develop further
+    make_json = st.button("Make JSON File", disabled=True)
 
 with tab_plan:
     st.write("In development")
