@@ -2,12 +2,11 @@ import streamlit as st
 
 # local imports
 from helper import margin_group
-#from commands import build_margin_command
+from commands import build_margin_command
 
 # initilise commands once
 if "commands" not in st.session_state:
     st.session_state.commands = []
-
 
 st.title("Interactive ESAPI Automation Code Generator")
 
@@ -16,13 +15,11 @@ tab_structures, tab_plan = st.tabs(["Auto Structure", "Auto Plan"])
 with tab_structures:
     st.header("Create list of structure generation commands")
 
-
     st.write("Define automation instruction")
 
     # Original structure ID
     orig_structure = st.text_input("Original Structure ID", max_chars=32, key = "original_id")
     
-
     # Command selection
     command_options = [
         "Margin for Structure",
@@ -59,63 +56,9 @@ with tab_structures:
             symmetric=symmetric
             )
         
-
-
-        # margins_keys = [
-        #     "Margin X1", "Margin X2", "Margin Y1",
-        #     "Margin Y2", "Margin Z1", "Margin Z2"
-        # ]
-
-        # # Determine initial values
-        # #top_val = float(st.session_state.get(margins_keys[0], 0.0))
-        # top_val = st.number_input(
-        #     margins_labels[0],
-        #     key = margins_keys[0],
-        #     min_value=0.0,
-        #     max_value=5.0,
-        #     step=0.1,
-        #     format="%0.1f",
-        #     #value=float(st.session_state.get(margins_keys[0], 0.0))
-        # )
-
-        # #if sym_margin:
-        #  #   margins_values = [top_val] * 6
-        # #else:
-        #     # Keep previous values if they exist
-        #  #   margins_values = [float(st.session_state.get(k, 0.0)) for k in margins_keys]
-        #  # if sym update other session state values before creating the widgets
-        # #if sym_margin:
-        #  #   for i in range(1,6):
-        #   #      st.session_state[margins_keys[i]] = top_val
-        # if sym_margin:
-        #     defaults = [top_val] * 5
-        # else:
-        #     defaults = []
-        #     for i in range(1,6):
-        #         defaults.append(st.session_state.get(margins_keys[i],0.0))
-
-        # # now Render remaining inputs
-        # for i in range(1,6):
-        #     #value = top_val if sym_margin else float(st.session_state.get(margins_keys[i],0.0))
-        #     st.number_input(
-        #         margins_labels[i],
-        #         key=margins_keys[i],
-        #         value=defaults[i-1],
-        #         min_value=0.0,
-        #         max_value=5.0,
-        #         step=0.1,
-        #         format="%0.1f",
-        #         disabled=(sym_margin)
-        #     )
-
-        # Collect final margins
-        #final_margins = [st.session_state[k] for k in margins_keys]
-
-
         margin_avoid = st.checkbox("Avoid structure?", key="Margin_Avoid")
         if margin_avoid:
             avoid_id = st.text_input("Avoid Structure ID", max_chars=32)
-
 
     elif chosen_command == "Extract Wall":
         outer_wall_margin = st.number_input(
@@ -151,17 +94,28 @@ with tab_structures:
         boolean_options = ["OR","AND","SUB","XOR"]
         boolean_choice = st.pills("Operator",boolean_options)
         second_structure = st.text_input("Second Structure ID", max_chars=32)
-
-
-    
+ 
 
     # ✅ Submit button
-    submit = st.button("Add instruction")
+    submit = st.button("Add command")
 
     if submit:
-        st.write(f"Command submitted: {chosen_command}")
         if chosen_command == "Margin for Structure":
-            st.write("Margins:", margins)
+            entry = build_margin_command(
+                original_structure_id=orig_structure,
+                output_structure_id=target_structure,
+                symmetric=symmetric,
+                margins=margins,
+                outer_or_inner=outer_or_inner,
+                margin_avoid_enabled=margin_avoid,
+                avoid_structure_id=avoid_id
+            )
+
+        st.session_state.commands.append(entry)
+        st.success("Margin commands added.")
+        #st.write(f"Command submitted: {chosen_command}")
+        #if chosen_command == "Margin for Structure":
+            #st.write("Margins:", margins)
 
     # to develop further
     make_json = st.button("Make JSON File", disabled=True)
