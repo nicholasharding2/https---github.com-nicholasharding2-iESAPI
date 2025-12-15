@@ -59,6 +59,8 @@ with tab_structures:
         margin_avoid = st.checkbox("Avoid structure?", key="Margin_Avoid")
         if margin_avoid:
             avoid_id = st.text_input("Avoid Structure ID", max_chars=32)
+        else:
+            avoid_id=""
 
     elif chosen_command == "Extract Wall":
         outer_wall_margin = st.number_input(
