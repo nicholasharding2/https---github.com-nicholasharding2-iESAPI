@@ -120,5 +120,34 @@ with tab_structures:
     # to develop further
     make_json = st.button("Make JSON File", disabled=True)
 
+    # make a place for queued commands
+    st.divider()
+    st.subheader("Queued commands")
+    if not st.session_state.commands:
+        st.info("No commands added yet.")
+    else:
+        header = st.columns([1,2,3,3,1])
+        header[0].write("No.")
+        header[1].write("Command")
+        header[2].write("Input")
+        header[3].write("Output")
+        header[4].write("")
+
+        to_delete = None
+
+        for i, cmd in enumerate(st.session_state.commands):
+            cols = st.columns([1,2,3,3,1])
+
+            cols[0].write(i+1)
+            cols[1].write(cmd["command"])
+            cols[2].write(cmd.get("input_structure", ""))
+            cols[3].write(cmd.get("output_structure",""))
+            if cols[4].button("X", key=f"del_{cmd['id']}"):
+                to_delete = i
+
+            if to_delete is not None:
+                st.session_state.commands.pop(to_delete)
+                st.rerun()
+
 with tab_plan:
     st.write("In development")
