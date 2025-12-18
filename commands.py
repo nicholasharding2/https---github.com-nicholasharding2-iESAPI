@@ -56,7 +56,7 @@ def build_margin_command(
     if margin_avoid_enabled:
         readable += f" avoiding {avoid_structure_id}."
     else:
-        readable_command += "."
+        readable += "."
     
     return {
         "id": str(uuid.uuid4()),
