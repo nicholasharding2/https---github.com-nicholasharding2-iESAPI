@@ -124,7 +124,7 @@ with tab_structures:
 
     # make a place for queued commands
     st.divider()
-    st.subheader("Queued commands")
+    st.subheader("Queued Commands")
     if not st.session_state.commands:
         st.info("No commands added yet.")
     else:
