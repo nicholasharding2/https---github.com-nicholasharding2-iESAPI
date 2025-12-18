@@ -141,7 +141,7 @@ with tab_structures:
             cols = st.columns([1,5,1])
 
             cols[0].write(i+1)
-            cols[1].write(cmd["readable_command"])
+            cols[1].write(cmd['readable_command'])
             if cols[2].button("X", key=f"del_{cmd['id']}"):
                 to_delete = i
 
