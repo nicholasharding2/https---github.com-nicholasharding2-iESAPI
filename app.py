@@ -140,8 +140,12 @@ with tab_structures:
         for i, cmd in enumerate(st.session_state.commands):
             cols = st.columns([1,5,1])
 
+            #cols[1].write(cmd["command"])
+            #cols[2].write(cmd.get("input_structure", ""))
+
             cols[0].write(i+1)
-            cols[1].write(cmd['readable_command'])
+            #cols[1].write(cmd['readable_command'])
+            cols[1].write(cmd.get("readable_command",""))
             if cols[2].button("X", key=f"del_{cmd['id']}"):
                 to_delete = i
 
