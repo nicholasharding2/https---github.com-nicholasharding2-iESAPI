@@ -33,7 +33,7 @@ with tab_structures:
 
     if chosen_command == "Margin for Structure":
         # Geometry choice
-        outer_or_inner = st.radio("Geometry [cm]", ["Create outer margin", "Create inner margin"])
+        outer_or_inner = st.radio("Outer or inner margin", ["outer", "inner"])
 
         symmetric = st.checkbox("Use symmetrical margin", value=True)
 
