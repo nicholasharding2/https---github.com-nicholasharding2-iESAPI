@@ -80,6 +80,49 @@ def build_margin_command(
         }
     }
 
+def build_extract_wall_command(
+    original_structure_id: str,
+    output_structure_id: str,
+    margins: list[float],
+)-> dict:
+    """
+    Build a schema entry for an Extract Wall command.
+
+    Parameters
+    ----------
+    original_structure_id : str
+        Source structure ID
+    output_structure_id : str
+        Resulting structure ID
+    margins : list of 2 floats
+        [outer_wall, inner_wall]
+    """
+    # validation
+    if len(margins)!=2:
+        raise ValueError("margins must have two floats")
+    
+    outer_margin, inner_margin = margins
+    readable = (
+        f"Extract a wall with outer margin {outer_margin:.1f} and "
+        f"inner margin {inner_margin:.1f} cm from {original_structure_id} into {output_structure_id}."
+    )
+
+    return {
+        "id": str(uuid.uuid4()),
+        "command": "Extract Wall",
+        "input_structure": original_structure_id,
+        "output_structure": output_structure_id,
+        "readable_command":readable,
+        "parameters":{
+            "margins_cm":{
+                "outer_margin":outer_margin,
+                "inner_margin":inner_margin
+            }
+        }
+    }
+  
+
+
 def build_old_command(
     
     original_structure_id: str,
