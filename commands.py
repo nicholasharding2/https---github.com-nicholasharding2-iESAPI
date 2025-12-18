@@ -29,6 +29,8 @@ def build_margin_command(
     avoid_structure_id : string
         Structure ID to avoid if used (otherwise "")
     """
+    readable_command= "Empty"
+
     if symmetric:
         readable_command = f"Grow a symmetric {outer_or_inner} margin of {margins[0]} cm from {original_structure_id} into {output_structure_id}"
     else:
