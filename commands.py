@@ -8,7 +8,7 @@ def build_margin_command(
     outer_or_inner: str,
     margin_avoid_enabled: bool = False,
     avoid_structure_id: str = ""
-):
+)-> dict:
     """
     Build a schema entry for a Margin command.
 
@@ -29,15 +29,32 @@ def build_margin_command(
     avoid_structure_id : string
         Structure ID to avoid if used (otherwise "")
     """
-    readable_command= "Empty"
+    # add validation
+    if len(margins) !=6:
+        raise ValueError("margins must be a list of six floats")
+    
+    if outer_or_inner not in ["outer","inner"]:
+        raise ValueError("outer_or_inner must be 'outer' or 'inner'")
+    
+    lat_l, lat_r, vert_u, vert_d, long_s, long_i = margins
 
     if symmetric:
-        readable_command = f"Grow a symmetric {outer_or_inner} margin of {margins[0]} cm from {original_structure_id} into {output_structure_id}"
+        readable = (
+            f"Grow a symmetric {outer_or_inner} margin of"
+            f"{lat_l:.1f} cm from {original_structure_id} into {output_structure_id}"
+        )
     else:
-        readable_command = f"Grow asymmetric {outer_or_inner} margins of {margins} (cm) from {original_structure_id} into {output_structure_id}"
+        readable = (
+            f"Grow asymmetric margin {outer_or_inner} margins"
+            f"Lat L {lat_l:.1f}, Lat R {lat_r:.1f}"
+            f"Vert U {vert_u:.1f}, Vert I {vert_d:.1f}"
+            f"Long S {long_s:.1f}, Long I {long_i:.1f} cm"
+            f"from {original_structure_id} into {output_structure_id}"
+        )
+
     
     if margin_avoid_enabled:
-        readable_command += f" avoiding {avoid_structure_id}."
+        readable += f" avoiding {avoid_structure_id}."
     else:
         readable_command += "."
     
@@ -46,6 +63,7 @@ def build_margin_command(
         "command": "Margin",
         "input_structure": original_structure_id,
         "output_structure": output_structure_id,
+        "readable_command":readable,
         "parameters": {
             "outer_or_inner": outer_or_inner,
             "symmetric": symmetric,
@@ -58,8 +76,7 @@ def build_margin_command(
                 "long_inf": margins[5]
             },
             "margin_avoid_enabled": margin_avoid_enabled,
-            "avoid_structure_id": avoid_structure_id if margin_avoid_enabled else "",
-            "readable_command": readable_command
+            "avoid_structure_id": avoid_structure_id if margin_avoid_enabled else ""
         }
     }
 
