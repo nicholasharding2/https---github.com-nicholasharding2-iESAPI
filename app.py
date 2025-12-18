@@ -138,13 +138,11 @@ with tab_structures:
         to_delete = None
 
         for i, cmd in enumerate(st.session_state.commands):
-            cols = st.columns([1,2,3,3,1])
+            cols = st.columns([1,5,1])
 
             cols[0].write(i+1)
-            cols[1].write(cmd["command"])
-            cols[2].write(cmd.get("input_structure", ""))
-            cols[3].write(cmd.get("output_structure",""))
-            if cols[4].button("X", key=f"del_{cmd['id']}"):
+            cols[1].write(cmd["readable_command"])
+            if cols[2].button("X", key=f"del_{cmd['id']}"):
                 to_delete = i
 
             if to_delete is not None:

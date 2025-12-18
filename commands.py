@@ -29,9 +29,19 @@ def build_margin_command(
     avoid_structure_id : string
         Structure ID to avoid if used (otherwise "")
     """
+    if symmetric:
+        readable_command = f"Grow a symmetric {outer_or_inner} margin of {margins[0]} cm from {original_structure_id} into {output_structure_id}"
+    else:
+        readable_command = f"Grow asymmetric {outer_or_inner} margins of {margins} (cm) from {original_structure_id} into {output_structure_id}"
+    
+    if margin_avoid_enabled:
+        readable_command += f" avoiding {avoid_structure_id}."
+    else:
+        readable_command += "."
+    
     return {
         "id": str(uuid.uuid4()),
-        "command": "margin",
+        "command": "Margin",
         "input_structure": original_structure_id,
         "output_structure": output_structure_id,
         "parameters": {
@@ -46,7 +56,8 @@ def build_margin_command(
                 "long_inf": margins[5]
             },
             "margin_avoid_enabled": margin_avoid_enabled,
-            "avoid_structure_id": avoid_structure_id if margin_avoid_enabled else ""
+            "avoid_structure_id": avoid_structure_id if margin_avoid_enabled else "",
+            "readable_command": readable_command
         }
     }
 
