@@ -96,12 +96,24 @@ with tab_structures:
         boolean_options = ["OR","AND","SUB","XOR"]
         boolean_choice = st.pills("Operator",boolean_options)
         second_structure = st.text_input("Second Structure ID", max_chars=32)
+
+    # add some validation logic before allowing button to be pressed
+
+    can_add = (
+        isinstance(orig_structure, str)
+        and isinstance(target_structure, str)
+        and orig_structure.strip() != ""
+        and target_structure.strip() != ""
+    )
+    if not can_add:
+        st.warning("Please enter a valid Original Structure and Target Structure ID.")
+    
  
 
     # ✅ Submit button
-    submit = st.button("Add command")
+    #submit = st.button("Add command")
 
-    if submit:
+    if st.button("Add command", disabled=not can_add):
         if chosen_command == "Margin for Structure":
             entry = build_margin_command(
                 original_structure_id=orig_structure,
