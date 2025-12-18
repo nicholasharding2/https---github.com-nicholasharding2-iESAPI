@@ -128,17 +128,15 @@ with tab_structures:
     if not st.session_state.commands:
         st.info("No commands added yet.")
     else:
-        header = st.columns([1,2,3,3,1])
+        header = st.columns([1,7,1])
         header[0].write("No.")
         header[1].write("Command")
-        header[2].write("Input")
-        header[3].write("Output")
-        header[4].write("")
+        header[2].write("")
 
         to_delete = None
 
         for i, cmd in enumerate(st.session_state.commands):
-            cols = st.columns([1,5,1])
+            cols = st.columns([1,7,1])
 
             #cols[1].write(cmd["command"])
             #cols[2].write(cmd.get("input_structure", ""))

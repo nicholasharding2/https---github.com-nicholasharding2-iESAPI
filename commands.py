@@ -45,7 +45,7 @@ def build_margin_command(
         )
     else:
         readable = (
-            f"Grow asymmetric margin {outer_or_inner} margins "
+            f"Grow asymmetric {outer_or_inner} margins of "
             f"Lat L {lat_l:.1f}, Lat R {lat_r:.1f} "
             f"Vert U {vert_u:.1f}, Vert I {vert_d:.1f} "
             f"Long S {long_s:.1f}, Long I {long_i:.1f} (cm) "
