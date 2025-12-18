@@ -40,15 +40,15 @@ def build_margin_command(
 
     if symmetric:
         readable = (
-            f"Grow a symmetric {outer_or_inner} margin of"
+            f"Grow a symmetric {outer_or_inner} margin of "
             f"{lat_l:.1f} cm from {original_structure_id} into {output_structure_id}"
         )
     else:
         readable = (
-            f"Grow asymmetric margin {outer_or_inner} margins"
-            f"Lat L {lat_l:.1f}, Lat R {lat_r:.1f}"
-            f"Vert U {vert_u:.1f}, Vert I {vert_d:.1f}"
-            f"Long S {long_s:.1f}, Long I {long_i:.1f} cm"
+            f"Grow asymmetric margin {outer_or_inner} margins "
+            f"Lat L {lat_l:.1f}, Lat R {lat_r:.1f} "
+            f"Vert U {vert_u:.1f}, Vert I {vert_d:.1f} "
+            f"Long S {long_s:.1f}, Long I {long_i:.1f} (cm) "
             f"from {original_structure_id} into {output_structure_id}"
         )
 
