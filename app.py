@@ -82,16 +82,27 @@ with tab_structures:
             value=0.0
             )
     elif chosen_command == "Crop":
-        crop_direction = st.radio("Remove part",["extending outside","extending inside"])
+        crop_direction = st.radio("Remove part extending",["outside","inside"])
+        st.write("target structure.")
         crop_structure = st.text_input("Crop Fodder Structure ID", max_chars=32)
-        additional_margin = st.number_input(
+
+        crop_avoid = st.checkbox("Additional margin?", key="Crop_Margin")
+        if crop_avoid:
+            #avoid_id = st.text_input("Avoid Structure ID", max_chars=32)
+            additional_margin = st.number_input(
             "Additional margin (cm)",
             min_value=0.0,
             max_value=5.0,
             step=0.1,
             format="%0.1f",
             value=0.0
-        )
+            )
+
+        else:
+            additional_margin=0.0
+
+        
+        
     elif chosen_command == "Boolean":
         boolean_options = ["OR","AND","SUB","XOR"]
         boolean_choice = st.pills("Operator",boolean_options)

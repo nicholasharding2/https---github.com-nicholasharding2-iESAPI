@@ -120,6 +120,59 @@ def build_extract_wall_command(
             }
         }
     }
+
+def build_crop_command(
+        original_structure_id: str,
+        output_structure_id: str,
+        outside_or_inside: str,
+        crop_structure_id: str,
+        additional_margin_enabled: bool=False,
+        additional_margin: float=0.0
+)->dict:
+    """
+    Build a schema entry for a Crop command
+    
+    Parameters
+    ----------
+    :param original_structure_id: Source structure ID
+    :type original_structure_id: str
+    :param output_structure_id: Output structure ID
+    :type output_structure_id: str
+    :param outside_or_inside: Crop part extending outside or inside crop structure
+    :type outside_or_inside: str
+    :param crop_structure_id: Structure to crop from
+    :type crop_structure_id: str
+    :param additional_margin: Additional margin to crop away from crop structure (cm)
+    :type additional_margin: float
+    :return: Description
+    :rtype: dict
+    """
+    # add validation?
+    
+    if additional_margin_enabled:
+        readable = (
+            f"Crop structure {original_structure_id} "
+            f"extending {outside_or_inside} {crop_structure_id} "
+            f"with an additional margin of {additional_margin:.1f} cm "
+            f"into {output_structure_id}."
+        )
+    else:
+        readable = (
+            f"Crop structure {original_structure_id} "
+            f"extending {outside_or_inside} {crop_structure_id} "
+            f"into {output_structure_id}."
+        ) 
+    
+    return {
+        "id": str(uuid.uuid4()),
+        "command" : "Crop",
+        "input_structure" : original_structure_id,
+        "output_structure": output_structure_id,
+        "crop_structure" : crop_structure_id,
+        "outside_or_inside" : outside_or_inside,
+        "additional margin_cm" : additional_margin
+
+    }
   
 
 
