@@ -103,7 +103,7 @@ def build_extract_wall_command(
     
     outer_margin, inner_margin = margins
     readable = (
-        f"Extract a wall with outer margin {outer_margin:.1f} and "
+        f"Extract a wall with outer margin {outer_margin:.1f} cm and "
         f"inner margin {inner_margin:.1f} cm from {original_structure_id} into {output_structure_id}."
     )
 
@@ -170,7 +170,8 @@ def build_crop_command(
         "output_structure": output_structure_id,
         "crop_structure" : crop_structure_id,
         "outside_or_inside" : outside_or_inside,
-        "additional margin_cm" : additional_margin
+        "additional margin_cm" : additional_margin,
+        "readable_command" : readable
 
     }
   

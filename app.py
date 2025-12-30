@@ -109,8 +109,8 @@ with tab_structures:
 
     elif chosen_command == "Crop":
         crop_direction = st.radio("Remove part extending",["outside","inside"])
-        st.write("target structure.")
-        crop_structure = st.text_input("Crop Fodder Structure ID", max_chars=32)
+        st.write("crop structure.")
+        crop_structure = st.text_input("Crop Structure ID", max_chars=32)
 
         crop_avoid = st.checkbox("Additional margin?", key="Crop_Margin")
         if crop_avoid:
@@ -194,7 +194,7 @@ with tab_structures:
             pass
 
         st.session_state.commands.append(entry)
-        st.success("Margin commands added.")
+        st.success(f"{chosen_command} command added.")
         #st.write(f"Command submitted: {chosen_command}")
         #if chosen_command == "Margin for Structure":
             #st.write("Margins:", margins)
