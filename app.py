@@ -16,10 +16,6 @@ with tab_structures:
     st.header("Create list of structure generation commands")
 
     st.write("Define automation instruction")
-
-    # Original structure ID
-    orig_structure = st.text_input("Original Structure ID", max_chars=32, key = "original_id")
-    
     # Command selection
     command_options = [
         "Margin for Structure",
@@ -28,10 +24,12 @@ with tab_structures:
         "Boolean"
     ]
     chosen_command = st.selectbox("Choose a command", command_options)
+    # Original structure ID
+    orig_structure = st.text_input("Original Structure ID", max_chars=32, key = "original_id")
 
     target_structure = st.text_input("Target Structure ID", max_chars=32, key = "target_id")
 
-    # add some validation for the button later
+    # add some validation for the add command button later
     can_add = False
     validation_errors = []
 
@@ -161,7 +159,7 @@ with tab_structures:
     
  
 
-    # ✅ Submit button
+    # Submit button
     #submit = st.button("Add command")
 
     if st.button("Add command", disabled=not can_add):
@@ -199,8 +197,7 @@ with tab_structures:
         #if chosen_command == "Margin for Structure":
             #st.write("Margins:", margins)
 
-    # to develop further
-    make_json = st.button("Make JSON File (in dev - disabled)", disabled=True)
+    
 
     # make a place for queued commands
     st.divider()
@@ -230,6 +227,8 @@ with tab_structures:
             if to_delete is not None:
                 st.session_state.commands.pop(to_delete)
                 st.rerun()
+    # to develop further
+    make_json = st.button("Make JSON File (in dev - disabled)", disabled=True)
 
 with tab_plan:
     st.write("In development")
