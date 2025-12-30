@@ -2,7 +2,7 @@ import streamlit as st
 
 # local imports
 from helper import margin_group
-from commands import build_margin_command
+from commands import build_margin_command, build_crop_command, build_extract_wall_command
 
 # initilise commands once
 if "commands" not in st.session_state:
@@ -30,6 +30,10 @@ with tab_structures:
     chosen_command = st.selectbox("Choose a command", command_options)
 
     target_structure = st.text_input("Target Structure ID", max_chars=32, key = "target_id")
+
+    # add some validation for the button later
+    can_add = False
+    validation_errors = []
 
     if chosen_command == "Margin for Structure":
         # Geometry choice
@@ -62,6 +66,18 @@ with tab_structures:
         else:
             avoid_id=""
 
+        # button validation
+        can_add = (
+            isinstance(orig_structure, str)
+            and isinstance(target_structure, str)
+            and orig_structure.strip() != ""
+            and target_structure.strip() != ""
+        )
+        if not can_add:
+            validation_errors.append("Original and output structure IDs are required.")
+
+
+
     elif chosen_command == "Extract Wall":
         outer_wall_margin = st.number_input(
             "Outer wall margin (cm)",
@@ -81,6 +97,16 @@ with tab_structures:
             format="%0.1f",
             value=0.0
             )
+        # button validation
+        can_add = (
+            isinstance(orig_structure, str)
+            and isinstance(target_structure, str)
+            and orig_structure.strip() != ""
+            and target_structure.strip() != ""
+        )
+        if not can_add:
+            validation_errors.append("Original and output structure IDs are required.")
+
     elif chosen_command == "Crop":
         crop_direction = st.radio("Remove part extending",["outside","inside"])
         st.write("target structure.")
@@ -100,6 +126,18 @@ with tab_structures:
 
         else:
             additional_margin=0.0
+        
+        # button validation
+        can_add = (
+            isinstance(orig_structure, str)
+            and isinstance(target_structure, str)
+            and isinstance(crop_structure, str)
+            and orig_structure.strip() != ""
+            and target_structure.strip() != ""
+            and crop_structure.strip() != ""
+        )
+        if not can_add:
+            validation_errors.append("Original, output and crop structure IDs are required.")
 
         
         
@@ -109,15 +147,17 @@ with tab_structures:
         second_structure = st.text_input("Second Structure ID", max_chars=32)
 
     # add some validation logic before allowing button to be pressed
+    
 
-    can_add = (
-        isinstance(orig_structure, str)
-        and isinstance(target_structure, str)
-        and orig_structure.strip() != ""
-        and target_structure.strip() != ""
-    )
+    #can_add = (
+     #   isinstance(orig_structure, str)
+      #  and isinstance(target_structure, str)
+       # and orig_structure.strip() != ""
+        #and target_structure.strip() != ""
+    #)
     if not can_add:
-        st.warning("Please enter a valid Original Structure and Target Structure ID.")
+        for msg in validation_errors:
+            st.warning(msg)
     
  
 
@@ -135,6 +175,23 @@ with tab_structures:
                 margin_avoid_enabled=margin_avoid,
                 avoid_structure_id=avoid_id
             )
+        elif chosen_command == "Extract Wall":
+            entry = build_extract_wall_command(
+                original_structure_id=orig_structure,
+                output_structure_id=target_structure,
+                margins=[outer_wall_margin,inner_wall_margin]
+            )
+        elif chosen_command == "Crop":
+            entry = build_crop_command(
+                original_structure_id=orig_structure,
+                output_structure_id=target_structure,
+                outside_or_inside=crop_direction,
+                crop_structure_id=crop_structure,
+                additional_margin_enabled=crop_avoid,
+                additional_margin=additional_margin
+            )
+        elif chosen_command == "Boolean":
+            pass
 
         st.session_state.commands.append(entry)
         st.success("Margin commands added.")
@@ -143,7 +200,7 @@ with tab_structures:
             #st.write("Margins:", margins)
 
     # to develop further
-    make_json = st.button("Make JSON File", disabled=True)
+    make_json = st.button("Make JSON File (in dev - disabled)", disabled=True)
 
     # make a place for queued commands
     st.divider()
