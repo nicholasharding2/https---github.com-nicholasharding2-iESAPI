@@ -212,7 +212,7 @@ def build_bool_command(
         readable = f"Keep the overlapping parts of {original_structure_id} and {second_structure_id} and put into {output_structure_id}."
     elif operator == "SUB":
         readable = f"Subtract {second_structure_id} from {original_structure_id} and put into {output_structure_id}"
-    elif readable == "XOR":
+    elif operator == "XOR":
         readable = f"Keep the non-overlapping parts of {original_structure_id} and {second_structure_id} and put into {output_structure_id}"
 
     return {
