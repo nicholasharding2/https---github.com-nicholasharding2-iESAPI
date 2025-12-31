@@ -24,10 +24,12 @@ with tab_structures:
         "Boolean"
     ]
     chosen_command = st.selectbox("Choose a command", command_options)
+    # final target ID
+    target_structure = st.text_input("Final Target Structure ID", max_chars=32, key = "target_id")
     # Original structure ID
     orig_structure = st.text_input("Original Structure ID", max_chars=32, key = "original_id")
 
-    target_structure = st.text_input("Target Structure ID", max_chars=32, key = "target_id")
+    
 
     # add some validation for the add command button later
     can_add = False
@@ -146,7 +148,7 @@ with tab_structures:
 
     # add some validation logic before allowing button to be pressed
     
-
+    
     #can_add = (
      #   isinstance(orig_structure, str)
       #  and isinstance(target_structure, str)
