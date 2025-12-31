@@ -174,6 +174,56 @@ def build_crop_command(
         "readable_command" : readable
 
     }
+
+def build_bool_command(
+        original_structure_id : str,
+        output_structure_id : str,
+        second_structure_id : str,
+        operator : str
+)-> dict:
+    """
+    Build a schema entry for Boolean command
+
+    Parameters
+    ---------
+    
+    :param original_structure_id: First structure in operator
+    :type original_structure_id: str
+    :param output_structure_id: Target structure for operation
+    :type output_structure_id: str
+    :param second_structure_id: Second structure in operato
+    :type second_structure_id: str
+    :param operator: The boolean operator
+    :type operator: str
+    :return: Description
+    :rtype: dict
+    """
+    # Validation
+    # operator should be either OR, AND, SUB or XOR
+    allowed_booleans = ["OR","AND","SUB","XOR"]
+
+    if operator not in allowed_booleans:
+        raise ValueError("The boolean operator must be OR, AND, SUB or XOR.")
+
+    # make the readable
+    if operator == "OR":
+        readable = f"Create a union of {original_structure_id} and {second_structure_id} and put into {output_structure_id}."
+    elif operator == "AND":
+        readable = f"Keep the overlapping parts of {original_structure_id} and {second_structure_id} and put into {output_structure_id}."
+    elif operator == "SUB":
+        readable = f"Subtract {second_structure_id} from {original_structure_id} and put into {output_structure_id}"
+    elif readable == "XOR":
+        readable = f"Keep the non-overlapping parts of {original_structure_id} and {second_structure_id} and put into {output_structure_id}"
+
+    return {
+        "id" : str(uuid.uuid4()),
+        "command" : "Crop",
+        "first_input_structure" : original_structure_id,
+        "second_input_structure" : second_structure_id,
+        "output_structure" : output_structure_id,
+        "boolean_operator" : operator,
+        "readable_command" : readable
+    }
   
 
 

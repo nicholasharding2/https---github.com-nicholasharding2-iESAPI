@@ -146,10 +146,20 @@ with tab_structures:
     elif chosen_command == "Boolean":
         boolean_options = ["OR","AND","SUB","XOR"]
         boolean_choice = st.pills("Operator",boolean_options)
+        if boolean_choice == "OR":
+            st.image("images/boolean_or.png", caption="Union (OR)", width=25)
+        elif boolean_choice == "AND":
+            st.image("images/boolean_and.png", caption="Intersection (AND)", width=25)
+        elif boolean_choice == "SUB":
+            st.image("images/boolean_sub.png", caption="Subtraction (SUB)", width=25)
+        elif boolean_choice == "XOR":
+            st.image("images/boolean_xor.png", caption="Exclusive OR (XOR)", width=25)
+
         second_structure = st.text_input("Second Structure ID", max_chars=32)
 
     # add some validation logic before allowing button to be pressed
-    
+    #if boolean_choice not in boolean_options:
+        
     
     #can_add = (
      #   isinstance(orig_structure, str)
