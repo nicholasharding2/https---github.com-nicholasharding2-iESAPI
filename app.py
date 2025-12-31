@@ -2,7 +2,7 @@ import streamlit as st
 
 # local imports
 from helper import margin_group
-from commands import build_margin_command, build_crop_command, build_extract_wall_command
+from commands import build_margin_command, build_crop_command, build_extract_wall_command, build_bool_command
 
 # initilise commands once
 if "commands" not in st.session_state:
@@ -147,13 +147,13 @@ with tab_structures:
         boolean_options = ["OR","AND","SUB","XOR"]
         boolean_choice = st.pills("Operator",boolean_options)
         if boolean_choice == "OR":
-            st.image("images/boolean_or.png", caption="Union (OR)", width=50)
+            st.image("images/boolean_or.png", caption="Union (OR)", width=75)
         elif boolean_choice == "AND":
-            st.image("images/boolean_and.png", caption="Intersection (AND)", width=50)
+            st.image("images/boolean_and.png", caption="Intersection (AND)", width=75)
         elif boolean_choice == "SUB":
-            st.image("images/boolean_sub.png", caption="Subtraction (SUB)", width=50)
+            st.image("images/boolean_sub.png", caption="Subtraction (SUB)", width=75)
         elif boolean_choice == "XOR":
-            st.image("images/boolean_xor.png", caption="Exclusive OR (XOR)", width=50)
+            st.image("images/boolean_xor.png", caption="Exclusive OR (XOR)", width=75)
 
         second_structure = st.text_input("Second Structure ID", max_chars=32)
 
@@ -168,7 +168,7 @@ with tab_structures:
             and boolean_choice in boolean_options
         )
         if not can_add:
-            validation_errors.append("Boolean operator and Original,target and second structures reqruired.")
+            validation_errors.append("A boolean operator and all of original, target and second structures required.")
         #if boolean_choice not in boolean_options:
         
     
@@ -214,7 +214,12 @@ with tab_structures:
                 additional_margin=additional_margin
             )
         elif chosen_command == "Boolean":
-            pass
+            entry = build_bool_command(
+                original_structure_id=orig_structure,
+                output_structure_id=target_structure,
+                second_structure_id=second_structure,
+                operator=boolean_choice
+            )
 
         st.session_state.commands.append(entry)
         st.success(f"{chosen_command} command added.")
