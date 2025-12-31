@@ -23,9 +23,11 @@ with tab_structures:
         "Crop",
         "Boolean"
     ]
+    st.divider()
     chosen_command = st.selectbox("Choose a command", command_options)
     # final target ID
     target_structure = st.text_input("Final Target Structure ID", max_chars=32, key = "target_id")
+    st.divider()
     # Original structure ID
     orig_structure = st.text_input("Original Structure ID", max_chars=32, key = "original_id")
 
