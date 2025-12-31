@@ -147,18 +147,29 @@ with tab_structures:
         boolean_options = ["OR","AND","SUB","XOR"]
         boolean_choice = st.pills("Operator",boolean_options)
         if boolean_choice == "OR":
-            st.image("images/boolean_or.png", caption="Union (OR)", width=25)
+            st.image("images/boolean_or.png", caption="Union (OR)", width=50)
         elif boolean_choice == "AND":
-            st.image("images/boolean_and.png", caption="Intersection (AND)", width=25)
+            st.image("images/boolean_and.png", caption="Intersection (AND)", width=50)
         elif boolean_choice == "SUB":
-            st.image("images/boolean_sub.png", caption="Subtraction (SUB)", width=25)
+            st.image("images/boolean_sub.png", caption="Subtraction (SUB)", width=50)
         elif boolean_choice == "XOR":
-            st.image("images/boolean_xor.png", caption="Exclusive OR (XOR)", width=25)
+            st.image("images/boolean_xor.png", caption="Exclusive OR (XOR)", width=50)
 
         second_structure = st.text_input("Second Structure ID", max_chars=32)
 
-    # add some validation logic before allowing button to be pressed
-    #if boolean_choice not in boolean_options:
+        # add some validation logic before allowing button to be pressed
+        can_add = (
+            isinstance(orig_structure, str)
+            and isinstance(target_structure, str)
+            and isinstance(second_structure, str)
+            and orig_structure.strip() != ""
+            and target_structure.strip() != ""
+            and second_structure.strip() != ""
+            and boolean_choice in boolean_options
+        )
+        if not can_add:
+            validation_errors.append("Boolean operator and Original,target and second structures reqruired.")
+        #if boolean_choice not in boolean_options:
         
     
     #can_add = (
