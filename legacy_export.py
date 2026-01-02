@@ -2,6 +2,9 @@ def empty_legacy_base(sequence: int) -> dict:
     """
     Base legacy command with all required fields present.
     """
+
+    
+
     return {
         "CommandSequence": sequence,
         "Directive": 0,
@@ -31,20 +34,22 @@ def legacy_margin(cmd: dict, sequence: int) ->dict:
     o_or_i = cmd["outer_or_inner"]
     expand = True if "outer" in o_or_i else False
 
+    # Need to convert into mm for legacy
+
     # assess if symmetric
     symmetric = cmd["symmetric"]
     if symmetric:
         base.update({
-            "UniformMargin" : margins[0]
+            "UniformMargin" : margins[0] * 10
         })
     else:
         base.update({
-            "X1" : margins["lat_left"],
-            "X2" : margins["lat_right"],
-            "Y1" : margins["vert_up"],
-            "Y2" : margins["vert_down"],
-            "Z1" : margins["long_sup"],
-            "Z2" : margins["long_inf"],
+            "X1" : margins["lat_left"] * 10,
+            "X2" : margins["lat_right"] * 10,
+            "Y1" : margins["vert_up"] * 10,
+            "Y2" : margins["vert_down"] * 10,
+            "Z1" : margins["long_sup"] * 10,
+            "Z2" : margins["long_inf"] * 10,
         })
 
     base.update({
