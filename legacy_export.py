@@ -12,12 +12,45 @@ def empty_legacy_base(sequence: int) -> dict:
         "Y2": 0.0,
         "Z1": 0.0,
         "Z2": 0.0,
-        "OriginalID": "",
-        "SecondID": "",
-        "NewID": "",
+        "OriginalID": None,
+        "SecondID": None,
+        "NewID": None,
         "ROIType": 0,
         "ReadableCmd": "",
         "Expand": False,
         "ValidIDs": False
     }
 
+def legacy_margin(cmd: dict, sequence: int) ->dict:
+    base = empty_legacy_base(sequence)
+
+    p = cmd["parameters"]
+    margins = p["margins_cm"]
+
+    # assess if outer or inner
+    o_or_i = cmd["outer_or_inner"]
+    expand = True if "outer" in o_or_i else False
+
+    # assess if symmetric
+    symmetric = cmd["symmetric"]
+    if symmetric:
+        base.update({
+            "UniformMargin" : margins[0]
+        })
+    else:
+        base.update({
+            "X1" : margins["lat_left"],
+            "X2" : margins["lat_right"],
+            "Y1" : margins["vert_up"],
+            "Y2" : margins["vert_down"],
+            "Z1" : margins["long_sup"],
+            "Z2" : margins["long_inf"],
+        })
+
+    base.update({
+        "Directive":6,
+        "OriginalID":cmd["input_structure"],
+        "NewID": cmd["output_structure"],
+        "ReadableCmd": cmd["readable_command"],
+        "Expand": expand
+    })
