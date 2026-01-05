@@ -1,8 +1,14 @@
 import streamlit as st
 
 # local imports
-from helper import margin_group
-from commands import build_margin_command, build_crop_command, build_extract_wall_command, build_bool_command
+from helper import margin_group, get_roi_types
+from commands import (
+    build_margin_command,
+    build_crop_command,
+    build_extract_wall_command,
+    build_bool_command,
+    build_copy_command
+)
 
 # initilise commands once
 if "commands" not in st.session_state:
@@ -21,7 +27,9 @@ with tab_structures:
         "Margin for Structure",
         "Extract Wall",
         "Crop",
-        "Boolean"
+        "Boolean",
+        "Copy",
+        "Remove"
     ]
     st.divider()
     chosen_command = st.selectbox("Choose a command", command_options)
@@ -169,8 +177,21 @@ with tab_structures:
         )
         if not can_add:
             validation_errors.append("A boolean operator and all of original, target and second structures required.")
-        #if boolean_choice not in boolean_options:
-        
+    elif chosen_command == "Copy":
+        st.write("Note that this is only needed for explicit copy only actions.")
+        st.write("All other commands automatically copy structures as required.")
+        copy_dicom_roi_options = get_roi_types()
+        copy_dicom_roi_choice = st.selectbox("Choose an ROI type", copy_dicom_roi_options, key="copy_dicom_roi")
+        # validation
+        can_add = (
+            isinstance(orig_structure, str)
+            and isinstance(target_structure, str)
+            and orig_structure.strip() != ""
+            and target_structure.strip() != ""
+            and copy_dicom_roi_choice in copy_dicom_roi_options
+        )
+        if not can_add:
+            validation_errors("A DICOM ROI, original and target structure are required.")
     
     #can_add = (
      #   isinstance(orig_structure, str)
@@ -219,6 +240,12 @@ with tab_structures:
                 output_structure_id=target_structure,
                 second_structure_id=second_structure,
                 operator=boolean_choice
+            )
+        elif chosen_command == "Copy":
+            entry = build_copy_command(
+                original_structure_id=orig_structure,
+                output_structure_id=target_structure,
+                dicom_roi_type=copy_dicom_roi_choice
             )
 
         st.session_state.commands.append(entry)

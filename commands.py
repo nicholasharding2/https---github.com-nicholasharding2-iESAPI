@@ -1,4 +1,30 @@
 import uuid
+def build_copy_command(
+    original_structure_id: str,
+    output_structure_id: str,
+    dicom_roi_type: str
+)-> dict:
+    """
+    Build a schema entry for a Copy command.
+    
+    :param original_structure_id: Description
+    :type original_structure_id: str
+    :param output_structure_id: Description
+    :type output_structure_id: str
+    :param dicom_roi_type: Description
+    :type dicom_roi_type: str
+    :return: Description
+    :rtype: dict
+    """
+    readable = f"Copy {original_structure_id} into {output_structure_id} with a ROI type of {dicom_roi_type}."
+    return{
+        "id": str(uuid.uuid4()),
+        "command": "Copy",
+        "input_structure": original_structure_id,
+        "output_structure": output_structure_id,
+        "dicom_roi_type": dicom_roi_type,
+        "readable_command": readable
+    }
 
 def build_margin_command(
     original_structure_id: str,

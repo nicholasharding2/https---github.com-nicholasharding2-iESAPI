@@ -38,3 +38,25 @@ def margin_group(base_key, labels, symmetric=False):
             vals.append(v)
 
     return vals
+
+def get_roi_types():
+
+
+    dicom_roi_types = [
+        "None",
+        "GTV",
+        "CTV",
+        "PTV",
+        "Avoidance",
+        "Organ",
+        "Treated Volume",
+        "Irrad Volume",
+        "Contrast Agent",
+        "Cavity",
+        "Support",
+        "Fixation",
+        "Dose Region",
+        "Control",
+        "Dose Measurement"
+    ]
+    return dicom_roi_types
