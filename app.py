@@ -191,7 +191,7 @@ with tab_structures:
             and copy_dicom_roi_choice in copy_dicom_roi_options
         )
         if not can_add:
-            validation_errors("A DICOM ROI, original and target structure are required.")
+            validation_errors.append("A DICOM ROI, original and target structure are required.")
     
     #can_add = (
      #   isinstance(orig_structure, str)
