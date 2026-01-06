@@ -36,6 +36,9 @@ with tab_structures:
     # final target ID
     target_structure = st.text_input("Final Target Structure ID", max_chars=32, key = "target_id")
     st.divider()
+    dicom_roi_options = get_roi_types()
+    dicom_roi_choice = st.selectbox("Choose Final Target ROI type (if requried)", dicom_roi_options, key="dicom_roi", index=None)
+    
     # Original structure ID
     orig_structure = st.text_input("Original Structure ID", max_chars=32, key = "original_id")
 
@@ -180,15 +183,15 @@ with tab_structures:
     elif chosen_command == "Copy":
         st.write("Note that this is only needed for explicit copy only actions.")
         st.write("All other commands automatically copy structures as required.")
-        copy_dicom_roi_options = get_roi_types()
-        copy_dicom_roi_choice = st.selectbox("Choose an ROI type", copy_dicom_roi_options, key="copy_dicom_roi")
+        #copy_dicom_roi_options = get_roi_types()
+        #copy_dicom_roi_choice = st.selectbox("Choose an ROI type", copy_dicom_roi_options, key="copy_dicom_roi")
         # validation
         can_add = (
             isinstance(orig_structure, str)
             and isinstance(target_structure, str)
             and orig_structure.strip() != ""
             and target_structure.strip() != ""
-            and copy_dicom_roi_choice in copy_dicom_roi_options
+            #and copy_dicom_roi_choice in copy_dicom_roi_options
         )
         if not can_add:
             validation_errors.append("A DICOM ROI, original and target structure are required.")
@@ -245,7 +248,7 @@ with tab_structures:
             entry = build_copy_command(
                 original_structure_id=orig_structure,
                 output_structure_id=target_structure,
-                dicom_roi_type=copy_dicom_roi_choice
+                dicom_roi_type=dicom_roi_choice
             )
 
         st.session_state.commands.append(entry)
