@@ -41,7 +41,7 @@ with tab_structures:
         target_structure = st.text_input("Final Target Structure ID", max_chars=32, key = "target_id")
         
         dicom_roi_options = get_roi_types()
-        dicom_roi_choice = st.selectbox("Choose Final Target ROI type (if requried)", dicom_roi_options, key="dicom_roi", index=None)
+        dicom_roi_choice = st.selectbox("Choose Final Target ROI type (if requried)", dicom_roi_options, key="dicom_roi")
         st.divider()
         # Original structure ID
         orig_structure = st.text_input("Original Structure ID", max_chars=32, key = "original_id")
@@ -195,7 +195,7 @@ with tab_structures:
             #and copy_dicom_roi_choice in copy_dicom_roi_options
         )
         if not can_add:
-            validation_errors.append("A DICOM ROI, original and target structure are required.")
+            validation_errors.append("An original and target structure are required.")
     
     elif chosen_command == "Remove":
         st.write("Remove a single structure by ID")
@@ -230,13 +230,15 @@ with tab_structures:
                 margins=margins,
                 outer_or_inner=outer_or_inner,
                 margin_avoid_enabled=margin_avoid,
-                avoid_structure_id=avoid_id
+                avoid_structure_id=avoid_id,
+                dicom_roi_type=dicom_roi_choice
             )
         elif chosen_command == "Extract Wall":
             entry = build_extract_wall_command(
                 original_structure_id=orig_structure,
                 output_structure_id=target_structure,
-                margins=[outer_wall_margin,inner_wall_margin]
+                margins=[outer_wall_margin,inner_wall_margin],
+                dicom_roi_type=dicom_roi_choice
             )
         elif chosen_command == "Crop":
             entry = build_crop_command(
@@ -245,19 +247,22 @@ with tab_structures:
                 outside_or_inside=crop_direction,
                 crop_structure_id=crop_structure,
                 additional_margin_enabled=crop_avoid,
-                additional_margin=additional_margin
+                additional_margin=additional_margin,
+                dicom_roi_type=dicom_roi_choice
             )
         elif chosen_command == "Boolean":
             entry = build_bool_command(
                 original_structure_id=orig_structure,
                 output_structure_id=target_structure,
                 second_structure_id=second_structure,
-                operator=boolean_choice
+                operator=boolean_choice,
+                dicom_roi_type=dicom_roi_choice
             )
         elif chosen_command == "Copy":
             entry = build_copy_command(
                 original_structure_id=orig_structure,
                 output_structure_id=target_structure,
+                dicom_roi_type=dicom_roi_choice,
                 dicom_roi_type=dicom_roi_choice
             )
         elif chosen_command == "Remove":

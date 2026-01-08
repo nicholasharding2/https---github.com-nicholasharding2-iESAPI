@@ -1,4 +1,8 @@
 import uuid
+#from helper import get_roi_types
+from helper import valid_roi
+#roi_types = get_roi_types()
+
 def build_copy_command(
     original_structure_id: str,
     output_structure_id: str,
@@ -51,6 +55,7 @@ def build_margin_command(
     symmetric: bool,
     margins: list[float],
     outer_or_inner: str,
+    dicom_roi_type: str = "None",
     margin_avoid_enabled: bool = False,
     avoid_structure_id: str = ""
 )-> dict:
@@ -81,12 +86,15 @@ def build_margin_command(
     if outer_or_inner not in ["outer","inner"]:
         raise ValueError("outer_or_inner must be 'outer' or 'inner'")
     
+    if not valid_roi(dicom_roi_type):
+        raise ValueError("Output structure DICOM ROI not valid.")
+
     lat_l, lat_r, vert_u, vert_d, long_s, long_i = margins
 
     if symmetric:
         readable = (
             f"Grow a symmetric {outer_or_inner} margin of "
-            f"{lat_l:.1f} cm from {original_structure_id} into {output_structure_id}"
+            f"{lat_l:.1f} cm from {original_structure_id} into {output_structure_id} with a ROI type of {dicom_roi_type}"
         )
     else:
         readable = (
@@ -94,7 +102,7 @@ def build_margin_command(
             f"Lat L {lat_l:.1f}, Lat R {lat_r:.1f} "
             f"Vert U {vert_u:.1f}, Vert I {vert_d:.1f} "
             f"Long S {long_s:.1f}, Long I {long_i:.1f} (cm) "
-            f"from {original_structure_id} into {output_structure_id}"
+            f"from {original_structure_id} into {output_structure_id} with a ROI type of {dicom_roi_type}"
         )
 
     
@@ -108,6 +116,8 @@ def build_margin_command(
         "command": "MARGIN",
         "input_structure": original_structure_id,
         "output_structure": output_structure_id,
+        "dicom_roi_type": dicom_roi_type,
+        "dicom_roi_type": dicom_roi_type,
         "readable_command":readable,
         "parameters": {
             "outer_or_inner": outer_or_inner,
@@ -127,8 +137,9 @@ def build_margin_command(
 
 def build_extract_wall_command(
     original_structure_id: str,
-    output_structure_id: str,
+    output_structure_id: str,    
     margins: list[float],
+    dicom_roi_type: str = "None"
 )-> dict:
     """
     Build a schema entry for an Extract Wall command.
@@ -145,11 +156,12 @@ def build_extract_wall_command(
     # validation
     if len(margins)!=2:
         raise ValueError("margins must have two floats")
-    
+    if not valid_roi(dicom_roi_type):
+        raise ValueError("Output structure DICOM ROI not valid.")
     outer_margin, inner_margin = margins
     readable = (
         f"Extract a wall with outer margin {outer_margin:.1f} cm and "
-        f"inner margin {inner_margin:.1f} cm from {original_structure_id} into {output_structure_id}."
+        f"inner margin {inner_margin:.1f} cm from {original_structure_id} into {output_structure_id} with a ROI type of {dicom_roi_type}."
     )
 
     return {
@@ -157,6 +169,7 @@ def build_extract_wall_command(
         "command": "EXTRACT_WALL",
         "input_structure": original_structure_id,
         "output_structure": output_structure_id,
+        "dicom_roi_type": dicom_roi_type,
         "readable_command":readable,
         "parameters":{
             "margins_cm":{
@@ -172,7 +185,8 @@ def build_crop_command(
         outside_or_inside: str,
         crop_structure_id: str,
         additional_margin_enabled: bool=False,
-        additional_margin: float=0.0
+        additional_margin: float=0.0,
+        dicom_roi_type: str = "None"
 )->dict:
     """
     Build a schema entry for a Crop command
@@ -194,18 +208,21 @@ def build_crop_command(
     """
     # add validation?
     
+    if not valid_roi(dicom_roi_type):
+        raise ValueError("Output structure DICOM ROI not valid.")
+    
     if additional_margin_enabled:
         readable = (
             f"Crop structure {original_structure_id} "
             f"extending {outside_or_inside} {crop_structure_id} "
             f"with an additional margin of {additional_margin:.1f} cm "
-            f"into {output_structure_id}."
+            f"into {output_structure_id} with a ROI type of {dicom_roi_type}."
         )
     else:
         readable = (
             f"Crop structure {original_structure_id} "
             f"extending {outside_or_inside} {crop_structure_id} "
-            f"into {output_structure_id}."
+            f"into {output_structure_id} with a ROI type of {dicom_roi_type}."
         ) 
     
     return {
@@ -213,6 +230,7 @@ def build_crop_command(
         "command" : "CROP",
         "input_structure" : original_structure_id,
         "output_structure": output_structure_id,
+        "dicom_roi_type": dicom_roi_type,
         "crop_structure" : crop_structure_id,
         "outside_or_inside" : outside_or_inside,
         "additional margin_cm" : additional_margin,
@@ -224,7 +242,8 @@ def build_bool_command(
         original_structure_id : str,
         output_structure_id : str,
         second_structure_id : str,
-        operator : str
+        operator : str,
+        dicom_roi_type: str = "None"
 )-> dict:
     """
     Build a schema entry for Boolean command
@@ -249,16 +268,19 @@ def build_bool_command(
 
     if operator not in allowed_booleans:
         raise ValueError("The boolean operator must be OR, AND, SUB or XOR.")
+    
+    if not valid_roi(dicom_roi_type):
+        raise ValueError("Output structure DICOM ROI not valid.")
 
     # make the readable
     if operator == "OR":
-        readable = f"Create a union of {original_structure_id} and {second_structure_id} and put into {output_structure_id}."
+        readable = f"Create a union of {original_structure_id} and {second_structure_id} and put into {output_structure_id} with a ROI type of {dicom_roi_type}."
     elif operator == "AND":
-        readable = f"Keep the overlapping parts of {original_structure_id} and {second_structure_id} and put into {output_structure_id}."
+        readable = f"Keep the overlapping parts of {original_structure_id} and {second_structure_id} and put into {output_structure_id} with a ROI type of {dicom_roi_type}."
     elif operator == "SUB":
-        readable = f"Subtract {second_structure_id} from {original_structure_id} and put into {output_structure_id}"
+        readable = f"Subtract {second_structure_id} from {original_structure_id} and put into {output_structure_id} with a ROI type of {dicom_roi_type}"
     elif operator == "XOR":
-        readable = f"Keep the non-overlapping parts of {original_structure_id} and {second_structure_id} and put into {output_structure_id}"
+        readable = f"Keep the non-overlapping parts of {original_structure_id} and {second_structure_id} and put into {output_structure_id} with a ROI type of {dicom_roi_type}"
 
     return {
         "id" : str(uuid.uuid4()),
@@ -266,6 +288,7 @@ def build_bool_command(
         "first_input_structure" : original_structure_id,
         "second_input_structure" : second_structure_id,
         "output_structure" : output_structure_id,
+        "dicom_roi_type": dicom_roi_type,
         "boolean_operator" : operator,
         "readable_command" : readable
     }

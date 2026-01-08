@@ -60,3 +60,6 @@ def get_roi_types():
         "Dose Measurement"
     ]
     return dicom_roi_types
+
+def valid_roi(roi_type: str):
+    return True if roi_type in get_roi_types() else False
