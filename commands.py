@@ -19,7 +19,7 @@ def build_copy_command(
     readable = f"Copy {original_structure_id} into {output_structure_id} with a ROI type of {dicom_roi_type}."
     return{
         "id": str(uuid.uuid4()),
-        "command": "Copy",
+        "command": "COPY",
         "input_structure": original_structure_id,
         "output_structure": output_structure_id,
         "dicom_roi_type": dicom_roi_type,
@@ -86,7 +86,7 @@ def build_margin_command(
     
     return {
         "id": str(uuid.uuid4()),
-        "command": "Margin",
+        "command": "MARGIN",
         "input_structure": original_structure_id,
         "output_structure": output_structure_id,
         "readable_command":readable,
@@ -135,7 +135,7 @@ def build_extract_wall_command(
 
     return {
         "id": str(uuid.uuid4()),
-        "command": "Extract Wall",
+        "command": "EXTRACT_WALL",
         "input_structure": original_structure_id,
         "output_structure": output_structure_id,
         "readable_command":readable,
@@ -191,7 +191,7 @@ def build_crop_command(
     
     return {
         "id": str(uuid.uuid4()),
-        "command" : "Crop",
+        "command" : "CROP",
         "input_structure" : original_structure_id,
         "output_structure": output_structure_id,
         "crop_structure" : crop_structure_id,
@@ -243,7 +243,7 @@ def build_bool_command(
 
     return {
         "id" : str(uuid.uuid4()),
-        "command" : "Crop",
+        "command" : "BOOLEAN",
         "first_input_structure" : original_structure_id,
         "second_input_structure" : second_structure_id,
         "output_structure" : output_structure_id,
@@ -264,7 +264,7 @@ def build_old_command(
     avoid_structure_id: str = ""
 ):
     """
-    Build a schema entry for a generic command.
+    Build a schema entry for a generic legacy command.
 
     Parameters
     ----------

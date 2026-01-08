@@ -35,10 +35,10 @@ with tab_structures:
     chosen_command = st.selectbox("Choose a command", command_options)
     # final target ID
     target_structure = st.text_input("Final Target Structure ID", max_chars=32, key = "target_id")
-    st.divider()
+    
     dicom_roi_options = get_roi_types()
     dicom_roi_choice = st.selectbox("Choose Final Target ROI type (if requried)", dicom_roi_options, key="dicom_roi", index=None)
-    
+    st.divider()
     # Original structure ID
     orig_structure = st.text_input("Original Structure ID", max_chars=32, key = "original_id")
 
