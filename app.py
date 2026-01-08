@@ -41,7 +41,7 @@ with tab_structures:
         target_structure = st.text_input("Final Target Structure ID", max_chars=32, key = "target_id")
         
         dicom_roi_options = get_roi_types()
-        dicom_roi_choice = st.selectbox("Choose Final Target ROI type (if requried)", dicom_roi_options, key="dicom_roi")
+        dicom_roi_choice = st.selectbox("Choose Final Target ROI type (if requried)", dicom_roi_options, key="dicom_roi", index=0)
         st.divider()
         # Original structure ID
         orig_structure = st.text_input("Original Structure ID", max_chars=32, key = "original_id")
