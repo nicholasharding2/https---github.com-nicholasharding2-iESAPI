@@ -262,7 +262,6 @@ with tab_structures:
             entry = build_copy_command(
                 original_structure_id=orig_structure,
                 output_structure_id=target_structure,
-                dicom_roi_type=dicom_roi_choice,
                 dicom_roi_type=dicom_roi_choice
             )
         elif chosen_command == "Remove":
