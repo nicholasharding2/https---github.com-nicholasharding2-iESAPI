@@ -7,7 +7,8 @@ from commands import (
     build_crop_command,
     build_extract_wall_command,
     build_bool_command,
-    build_copy_command
+    build_copy_command,
+    build_remove_command
 )
 
 # initilise commands once
@@ -33,14 +34,17 @@ with tab_structures:
     ]
     st.divider()
     chosen_command = st.selectbox("Choose a command", command_options)
-    # final target ID
-    target_structure = st.text_input("Final Target Structure ID", max_chars=32, key = "target_id")
     
-    dicom_roi_options = get_roi_types()
-    dicom_roi_choice = st.selectbox("Choose Final Target ROI type (if requried)", dicom_roi_options, key="dicom_roi", index=None)
-    st.divider()
-    # Original structure ID
-    orig_structure = st.text_input("Original Structure ID", max_chars=32, key = "original_id")
+    if chosen_command not in ["Remove"]:
+    
+        # final target ID
+        target_structure = st.text_input("Final Target Structure ID", max_chars=32, key = "target_id")
+        
+        dicom_roi_options = get_roi_types()
+        dicom_roi_choice = st.selectbox("Choose Final Target ROI type (if requried)", dicom_roi_options, key="dicom_roi", index=None)
+        st.divider()
+        # Original structure ID
+        orig_structure = st.text_input("Original Structure ID", max_chars=32, key = "original_id")
 
     
 
@@ -88,8 +92,6 @@ with tab_structures:
         )
         if not can_add:
             validation_errors.append("Original and output structure IDs are required.")
-
-
 
     elif chosen_command == "Extract Wall":
         outer_wall_margin = st.number_input(
@@ -152,8 +154,7 @@ with tab_structures:
         if not can_add:
             validation_errors.append("Original, output and crop structure IDs are required.")
 
-        
-        
+               
     elif chosen_command == "Boolean":
         boolean_options = ["OR","AND","SUB","XOR"]
         boolean_choice = st.pills("Operator",boolean_options)
@@ -196,6 +197,15 @@ with tab_structures:
         if not can_add:
             validation_errors.append("A DICOM ROI, original and target structure are required.")
     
+    elif chosen_command == "Remove":
+        st.write("Remove a single structure by ID")
+        remove_structure = st.text_input("Structure ID to Remove", max_chars=32)
+        can_add = (
+            isinstance(remove_structure, str)
+            and remove_structure.strip()!=""
+        )
+        if not can_add:
+            validation_errors.append("Please provide a valid ID.")
     #can_add = (
      #   isinstance(orig_structure, str)
       #  and isinstance(target_structure, str)
@@ -249,6 +259,10 @@ with tab_structures:
                 original_structure_id=orig_structure,
                 output_structure_id=target_structure,
                 dicom_roi_type=dicom_roi_choice
+            )
+        elif chosen_command == "Remove":
+            entry = build_remove_command(
+                remove_structure_id=remove_structure
             )
 
         st.session_state.commands.append(entry)

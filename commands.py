@@ -26,6 +26,25 @@ def build_copy_command(
         "readable_command": readable
     }
 
+def build_remove_command(
+        remove_structure_id: str
+)-> dict:
+    """
+    Build a schema entry for a Remove command.
+    
+    :param remove_structure_id: Description
+    :type remove_structure_id: str
+    :return: Description
+    :rtype: dict
+    """
+    readable = f"Remove structure {remove_structure_id}."
+    return{
+        "id":str(uuid.uuid4()),
+        "command": "REMOVE",
+        "remove_structure": remove_structure_id,
+        "readable_command": readable
+    }
+
 def build_margin_command(
     original_structure_id: str,
     output_structure_id: str,
