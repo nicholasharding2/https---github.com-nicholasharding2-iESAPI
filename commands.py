@@ -49,6 +49,30 @@ def build_remove_command(
         "readable_command": readable
     }
 
+def build_remove_empty_command(
+        exclusion_list: list[str]
+)-> dict:
+    """
+    Docstring for build_remove_empty_command
+    
+    :param exclusion_list: Description
+    :type exclusion_list: list[str]
+    :return: Description
+    :rtype: dict
+    """
+    
+    if len(exclusion_list)>1:
+        readable = f"Remove all empty structures except {','.join(exclusion_list)}"
+    else:
+        readable = "Remove all empty structures."
+    
+    return{
+        "id":str(uuid.uuid4()),
+        "command": "REMOVE_EMPTY",
+        "exclusion_list":exclusion_list,
+        "readable_command": readable
+    }
+
 def build_margin_command(
     original_structure_id: str,
     output_structure_id: str,

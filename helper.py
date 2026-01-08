@@ -63,3 +63,6 @@ def get_roi_types():
 
 def valid_roi(roi_type: str):
     return True if roi_type in get_roi_types() else False
+
+def has_remove_empty(commands: list[dict]) -> bool:
+    return any(cmd["command"] == "REMOVE_EMPTY" for cmd in commands)

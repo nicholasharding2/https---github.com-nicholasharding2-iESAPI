@@ -1,14 +1,15 @@
 import streamlit as st
 
 # local imports
-from helper import margin_group, get_roi_types
+from helper import margin_group, get_roi_types,has_remove_empty
 from commands import (
     build_margin_command,
     build_crop_command,
     build_extract_wall_command,
     build_bool_command,
     build_copy_command,
-    build_remove_command
+    build_remove_command,
+    build_remove_empty_command
 )
 
 # initilise commands once
@@ -30,18 +31,19 @@ with tab_structures:
         "Crop",
         "Boolean",
         "Copy",
-        "Remove"
+        "Remove",
+        "Remove Empty"
     ]
     st.divider()
     chosen_command = st.selectbox("Choose a command", command_options)
     
-    if chosen_command not in ["Remove"]:
+    if chosen_command not in ["Remove","Remove Empty"]:
     
         # final target ID
         target_structure = st.text_input("Final Target Structure ID", max_chars=32, key = "target_id")
         
         dicom_roi_options = get_roi_types()
-        dicom_roi_choice = st.selectbox("Choose Final Target ROI type (if requried)", dicom_roi_options, key="dicom_roi", index=0)
+        dicom_roi_choice = st.selectbox("Choose Final Target ROI type", dicom_roi_options, key="dicom_roi", index=0)
         st.divider()
         # Original structure ID
         orig_structure = st.text_input("Original Structure ID", max_chars=32, key = "original_id")
@@ -206,12 +208,24 @@ with tab_structures:
         )
         if not can_add:
             validation_errors.append("Please provide a valid ID.")
-    #can_add = (
-     #   isinstance(orig_structure, str)
-      #  and isinstance(target_structure, str)
-       # and orig_structure.strip() != ""
-        #and target_structure.strip() != ""
-    #)
+    
+    elif chosen_command == "Remove Empty":
+        st.write("Remove all empty structures except those in the exclusion list")
+        exclusion_list = st.multiselect(
+            "Empty Structure IDs not to be removed:",
+            [],
+            max_selections=15,
+            accept_new_options=True
+        )
+
+        # check if there is already a remove empty in the list (should only be one)
+        if has_remove_empty(st.session_state.commands):
+            
+            can_add = False
+        if not can_add:
+            validation_errors.append("A Remove Empty structures command already exists.")
+
+            
     if not can_add:
         for msg in validation_errors:
             st.warning(msg)
