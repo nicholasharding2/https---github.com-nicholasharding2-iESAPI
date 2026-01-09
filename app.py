@@ -51,7 +51,7 @@ with tab_structures:
     
 
     # add some validation for the add command button later
-    can_add = False
+    can_add = True
     validation_errors = []
 
     if chosen_command == "Margin for Structure":
