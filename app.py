@@ -236,25 +236,24 @@ with tab_structures:
         chosen_command == "Remove Empty"
         and remove_empty_exists
     )
-    if disable_add:
-        can_add = False
-        validation_errors.append("A Remove Empty structures command already exists.")
+
 
     # debug
-    st.write("Commands:", [c["command"] for c in st.session_state.commands])
+    #st.write("Commands:", [c["command"] for c in st.session_state.commands])
 
     if not can_add:
         for msg in validation_errors:
             st.warning(msg)
     
- 
+    if disable_add:
+        st.warning("A Remove Empty command already exists.")
 
     # Submit button
     #submit = st.button("Add command")
 
+    entry = None
 
-
-    if st.button("Add command", disabled=not can_add):
+    if st.button("Add command", disabled=not can_add or disable_add):
         if chosen_command == "Margin for Structure":
             entry = build_margin_command(
                 original_structure_id=orig_structure,
@@ -266,6 +265,7 @@ with tab_structures:
                 avoid_structure_id=avoid_id,
                 dicom_roi_type=dicom_roi_choice
             )
+            st.session_state.commands.append(entry)
         elif chosen_command == "Extract Wall":
             entry = build_extract_wall_command(
                 original_structure_id=orig_structure,
@@ -273,6 +273,7 @@ with tab_structures:
                 margins=[outer_wall_margin,inner_wall_margin],
                 dicom_roi_type=dicom_roi_choice
             )
+            st.session_state.commands.append(entry)
         elif chosen_command == "Crop":
             entry = build_crop_command(
                 original_structure_id=orig_structure,
@@ -283,6 +284,7 @@ with tab_structures:
                 additional_margin=additional_margin,
                 dicom_roi_type=dicom_roi_choice
             )
+            st.session_state.commands.append(entry)
         elif chosen_command == "Boolean":
             entry = build_bool_command(
                 original_structure_id=orig_structure,
@@ -291,23 +293,33 @@ with tab_structures:
                 operator=boolean_choice,
                 dicom_roi_type=dicom_roi_choice
             )
+            st.session_state.commands.append(entry)
         elif chosen_command == "Copy":
             entry = build_copy_command(
                 original_structure_id=orig_structure,
                 output_structure_id=target_structure,
                 dicom_roi_type=dicom_roi_choice
             )
+            st.session_state.commands.append(entry)
         elif chosen_command == "Remove":
             entry = build_remove_command(
                 remove_structure_id=remove_structure
             )
+            st.session_state.commands.append(entry)
         elif chosen_command == "Remove Empty":
-            entry = build_remove_empty_command(
-                exclusion_list=exclusion_list
-            )
+            if any(c["command"] == "REMOVE_EMPTY"
+                   for c in st.session_state.commands):
+                st.warning("Remove Empty Command already exists. Command not added.")
+            else:
+                entry = build_remove_empty_command(
+                    exclusion_list=exclusion_list
+                )
+                st.session_state.commands.append(entry)
 
-        st.session_state.commands.append(entry)
+        #st.session_state.commands.append(entry)
         st.success(f"{chosen_command} command added.")
+        # debug
+        st.write("Commands:", [c["command"] for c in st.session_state.commands])
         #st.write(f"Command submitted: {chosen_command}")
         #if chosen_command == "Margin for Structure":
             #st.write("Margins:", margins)
