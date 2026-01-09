@@ -227,6 +227,14 @@ with tab_structures:
             validation_errors.append("A Remove Empty structures command already exists.")
 
 
+    disabled_add = (
+        chosen_command == "Remove Empty"
+        and has_remove_empty(st.session_state.commands)
+    )
+
+    if disabled_add:
+        can_add = False
+
     if not can_add:
         for msg in validation_errors:
             st.warning(msg)
@@ -235,6 +243,8 @@ with tab_structures:
 
     # Submit button
     #submit = st.button("Add command")
+
+
 
     if st.button("Add command", disabled=not can_add):
         if chosen_command == "Margin for Structure":
