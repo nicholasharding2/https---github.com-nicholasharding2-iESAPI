@@ -240,7 +240,8 @@ with tab_structures:
         can_add = False
         validation_errors.append("A Remove Empty structures command already exists.")
 
-    
+    # debug
+    st.write("Commands:", [c["command"] for c in st.session_state.commands])
 
     if not can_add:
         for msg in validation_errors:
