@@ -245,8 +245,8 @@ with tab_structures:
         for msg in validation_errors:
             st.warning(msg)
     
-    if disable_add:
-        st.warning("A Remove Empty command already exists.")
+    #if disable_add:
+        #st.warning("A Remove Empty command already exists.")
 
     # Submit button
     #submit = st.button("Add command")
@@ -266,6 +266,7 @@ with tab_structures:
                 dicom_roi_type=dicom_roi_choice
             )
             st.session_state.commands.append(entry)
+            st.success("Margin command added.")
         elif chosen_command == "Extract Wall":
             entry = build_extract_wall_command(
                 original_structure_id=orig_structure,
@@ -274,6 +275,7 @@ with tab_structures:
                 dicom_roi_type=dicom_roi_choice
             )
             st.session_state.commands.append(entry)
+            st.success("Extract Wall command added.")
         elif chosen_command == "Crop":
             entry = build_crop_command(
                 original_structure_id=orig_structure,
@@ -285,6 +287,7 @@ with tab_structures:
                 dicom_roi_type=dicom_roi_choice
             )
             st.session_state.commands.append(entry)
+            st.success("Crop command added.")
         elif chosen_command == "Boolean":
             entry = build_bool_command(
                 original_structure_id=orig_structure,
@@ -294,6 +297,7 @@ with tab_structures:
                 dicom_roi_type=dicom_roi_choice
             )
             st.session_state.commands.append(entry)
+            st.success(f"Boolean {boolean_choice} command added.")
         elif chosen_command == "Copy":
             entry = build_copy_command(
                 original_structure_id=orig_structure,
@@ -301,11 +305,13 @@ with tab_structures:
                 dicom_roi_type=dicom_roi_choice
             )
             st.session_state.commands.append(entry)
+            st.success("Copy command added.")
         elif chosen_command == "Remove":
             entry = build_remove_command(
                 remove_structure_id=remove_structure
             )
             st.session_state.commands.append(entry)
+            st.success("Remove command added.")
         elif chosen_command == "Remove Empty":
             if any(c["command"] == "REMOVE_EMPTY"
                    for c in st.session_state.commands):
@@ -315,9 +321,10 @@ with tab_structures:
                     exclusion_list=exclusion_list
                 )
                 st.session_state.commands.append(entry)
+                st.success("Remove Empty command added.")
 
         #st.session_state.commands.append(entry)
-        st.success(f"{chosen_command} command added.")
+        #st.success(f"{chosen_command} command added.")
         # debug
         st.write("Commands:", [c["command"] for c in st.session_state.commands])
         #st.write(f"Command submitted: {chosen_command}")
