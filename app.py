@@ -1,7 +1,7 @@
 import streamlit as st
 
 # local imports
-from helper import margin_group, get_roi_types,has_remove_empty
+from helper import margin_group, get_roi_types, has_remove_empty
 from commands import (
     build_margin_command,
     build_crop_command,
@@ -225,7 +225,7 @@ with tab_structures:
         if not can_add:
             validation_errors.append("A Remove Empty structures command already exists.")
 
-            
+
     if not can_add:
         for msg in validation_errors:
             st.warning(msg)
