@@ -283,6 +283,10 @@ with tab_structures:
             entry = build_remove_command(
                 remove_structure_id=remove_structure
             )
+        elif chosen_command == "Remove Empty":
+            entry = build_remove_empty_command(
+                exclusion_list=exclusion_list
+            )
 
         st.session_state.commands.append(entry)
         st.success(f"{chosen_command} command added.")
