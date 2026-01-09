@@ -219,9 +219,10 @@ with tab_structures:
         )
 
         # check if there is already a remove empty in the list (should only be one)
-        if has_remove_empty(st.session_state.commands):
+        can_add = not has_remove_empty(st.session_state.commands)
+        #if has_remove_empty(st.session_state.commands):
             
-            can_add = False
+            #can_add = False
         if not can_add:
             validation_errors.append("A Remove Empty structures command already exists.")
 
