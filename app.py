@@ -238,6 +238,7 @@ with tab_structures:
     )
     if disable_add:
         can_add = False
+        validation_errors.append("A Remove Empty structures command already exists.")
 
     
 
