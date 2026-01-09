@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/esapi/automation.schema.json",
+  "title": "ESAPI Automation Command List",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "$ref": "#/definitions/Command"
+  },
+  "definitions": {
+    "Command": {
+      "oneOf": [
+        { "$ref": "#/definitions/MarginCommand" },
+        { "$ref": "#/definitions/ExtractWallCommand" },
+        { "$ref": "#/definitions/CropCommand" },
+        { "$ref": "#/definitions/BooleanCommand" },
+        { "$ref": "#/definitions/RemoveCommand" },
+        { "$ref": "#/definitions/RemoveEmptyCommand" }
+      ]
+    },
+    "MarginCommand": {
+      "type": "object",
+      "required": [
+        "id",
+        "command",
+        "input_structure",
+        "output_structure",
+        "dicom_roi_type",
+        "readable_command",
+        "parameters"
+      ],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "command": { "const": "MARGIN" },
+        "input_structure": { "type": "string", "minLength": 1 },
+        "output_structure": { "type": "string", "minLength": 1 },
+        "dicom_roi_type": { "type": "string" },
+        "readable_command": { "type": "string" },
+        "parameters": {
+          "type": "object",
+          "required": [
+            "outer_or_inner",
+            "symmetric",
+            "margins_cm",
+            "margin_avoid_enabled",
+            "avoid_structure_id"
+          ],
+          "properties": {
+            "outer_or_inner": { "enum": ["outer", "inner"] },
+            "symmetric": { "type": "boolean" },
+            "margins_cm": {
+              "type": "object",
+              "required": [
+                "lat_left",
+                "lat_right",
+                "vert_up",
+                "vert_down",
+                "long_sup",
+                "long_inf"
+              ],
+              "properties": {
+                "lat_left": { "type": "number" },
+                "lat_right": { "type": "number" },
+                "vert_up": { "type": "number" },
+                "vert_down": { "type": "number" },
+                "long_sup": { "type": "number" },
+                "long_inf": { "type": "number" }
+              }
+            },
+            "margin_avoid_enabled": { "type": "boolean" },
+            "avoid_structure_id": {
+              "type": ["string", "null"],
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "ExtractWallCommand": {
+      "type": "object",
+      "required": [
+        "id",
+        "command",
+        "input_structure",
+        "output_structure",
+        "readable_command",
+        "parameters"
+      ],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "command": { "const": "EXTRACT_WALL" },
+        "input_structure": { "type": "string", "minLength": 1 },
+        "output_structure": { "type": "string", "minLength": 1 },
+        "readable_command": { "type": "string" },
+        "parameters": {
+          "type": "object",
+          "required": ["outer_margin_cm", "inner_margin_cm"],
+          "properties": {
+            "outer_margin_cm": { "type": "number" },
+            "inner_margin_cm": { "type": "number" }
+          }
+        }
+      }
+    },
+    "CropCommand": {
+      "type": "object",
+      "required": [
+        "id",
+        "command",
+        "input_structure",
+        "output_structure",
+        "readable_command",
+        "parameters"
+      ],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "command": { "const": "CROP" },
+        "input_structure": { "type": "string", "minLength": 1 },
+        "output_structure": { "type": "string", "minLength": 1 },
+        "readable_command": { "type": "string" },
+        "parameters": {
+          "type": "object",
+          "required": [
+            "crop_structure",
+            "outside_or_inside",
+            "additional_margin_cm"
+          ],
+          "properties": {
+            "crop_structure": { "type": "string", "minLength": 1 },
+            "outside_or_inside": { "enum": ["outside", "inside"] },
+            "additional_margin_cm": { "type": ["number", "null"] }
+          }
+        }
+      }
+    },
+    "BooleanCommand": {
+      "type": "object",
+      "required": [
+        "id",
+        "command",
+        "input_structure",
+        "second_structure",
+        "output_structure",
+        "readable_command",
+        "parameters"
+      ],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "command": { "const": "BOOLEAN" },
+        "input_structure": { "type": "string", "minLength": 1 },
+        "second_structure": { "type": "string", "minLength": 1 },
+        "output_structure": { "type": "string", "minLength": 1 },
+        "readable_command": { "type": "string" },
+        "parameters": {
+          "type": "object",
+          "required": ["operator"],
+          "properties": {
+            "operator": { "enum": ["AND", "OR", "SUB", "XOR"] }
+          }
+        }
+      }
+    },
+    "RemoveCommand": {
+      "type": "object",
+      "required": [
+        "id",
+        "command",
+        "structure_id",
+        "readable_command"
+      ],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "command": { "const": "REMOVE" },
+        "structure_id": { "type": "string", "minLength": 1 },
+        "readable_command": { "type": "string" }
+      }
+    },
+    "RemoveEmptyCommand": {
+      "type": "object",
+      "required": [
+        "id",
+        "command",
+        "readable_command",
+        "parameters"
+      ],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "command": { "const": "REMOVE_EMPTY" },
+        "readable_command": { "type": "string" },
+        "parameters": {
+          "type": "object",
+          "required": ["exclusion_list"],
+          "properties": {
+            "exclusion_list": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

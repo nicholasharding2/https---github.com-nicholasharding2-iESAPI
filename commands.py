@@ -9,7 +9,7 @@ def build_copy_command(
     dicom_roi_type: str
 )-> dict:
     """
-    Build a schema entry for a Copy command.
+    Docstring for build_copy_command
     
     :param original_structure_id: Description
     :type original_structure_id: str
@@ -79,29 +79,31 @@ def build_margin_command(
     symmetric: bool,
     margins: list[float],
     outer_or_inner: str,
-    dicom_roi_type: str = "None",
+    dicom_roi_type: str,
     margin_avoid_enabled: bool = False,
-    avoid_structure_id: str = ""
+    avoid_structure_id: str | None = None
 )-> dict:
     """
-    Build a schema entry for a Margin command.
-
-    Parameters
-    ----------
-    original_structure_id : str
-        Source structure ID
-    output_structure_id : str
-        Resulting structure ID
-    symmetric : bool
-        Whether margins are symmetric
-    margins : list of 6 floats
-        [lat_left, lat_right, vert_up, vert_down, long_sup, long_inf]
-    outer_or_inner : str
-        "outer" or "inner"
-    margin_avoid_enabled : bool
-        Whether margin avoid is used
-    avoid_structure_id : string
-        Structure ID to avoid if used (otherwise "")
+    Docstring for build_margin_command
+    
+    :param original_structure_id: Description
+    :type original_structure_id: str
+    :param output_structure_id: Description
+    :type output_structure_id: str
+    :param symmetric: Description
+    :type symmetric: bool
+    :param margins: Description
+    :type margins: list[float]
+    :param outer_or_inner: Description
+    :type outer_or_inner: str
+    :param dicom_roi_type: Description
+    :type dicom_roi_type: str
+    :param margin_avoid_enabled: Description
+    :type margin_avoid_enabled: bool
+    :param avoid_structure_id: Description
+    :type avoid_structure_id: str | None
+    :return: Description
+    :rtype: dict
     """
     # add validation
     if len(margins) !=6:
@@ -141,7 +143,6 @@ def build_margin_command(
         "input_structure": original_structure_id,
         "output_structure": output_structure_id,
         "dicom_roi_type": dicom_roi_type,
-        "dicom_roi_type": dicom_roi_type,
         "readable_command":readable,
         "parameters": {
             "outer_or_inner": outer_or_inner,
@@ -155,7 +156,7 @@ def build_margin_command(
                 "long_inf": margins[5]
             },
             "margin_avoid_enabled": margin_avoid_enabled,
-            "avoid_structure_id": avoid_structure_id if margin_avoid_enabled else ""
+            "avoid_structure_id": avoid_structure_id if margin_avoid_enabled else None
         }
     }
 
@@ -166,16 +167,18 @@ def build_extract_wall_command(
     dicom_roi_type: str = "None"
 )-> dict:
     """
-    Build a schema entry for an Extract Wall command.
-
-    Parameters
-    ----------
-    original_structure_id : str
-        Source structure ID
-    output_structure_id : str
-        Resulting structure ID
-    margins : list of 2 floats
-        [outer_wall, inner_wall]
+    Docstring for build_extract_wall_command
+    
+    :param original_structure_id: Description
+    :type original_structure_id: str
+    :param output_structure_id: Description
+    :type output_structure_id: str
+    :param margins: Description
+    :type margins: list[float]
+    :param dicom_roi_type: Description
+    :type dicom_roi_type: str
+    :return: Description
+    :rtype: dict
     """
     # validation
     if len(margins)!=2:
@@ -255,10 +258,13 @@ def build_crop_command(
         "input_structure" : original_structure_id,
         "output_structure": output_structure_id,
         "dicom_roi_type": dicom_roi_type,
-        "crop_structure" : crop_structure_id,
-        "outside_or_inside" : outside_or_inside,
-        "additional margin_cm" : additional_margin,
-        "readable_command" : readable
+        "readable_command" : readable,
+        "parameters": {
+            "crop_structure" : crop_structure_id,
+            "outside_or_inside" : outside_or_inside,
+            "additional_margin_cm": additional_margin if additional_margin_enabled else None
+        }
+        
 
     }
 
