@@ -1,7 +1,7 @@
 import streamlit as st
 
 # local imports
-from helper import margin_group, get_roi_types, has_remove_empty
+from helper import margin_group, get_roi_types #, has_remove_empty
 from commands import (
     build_margin_command,
     build_crop_command,
@@ -326,7 +326,7 @@ with tab_structures:
         #st.session_state.commands.append(entry)
         #st.success(f"{chosen_command} command added.")
         # debug
-        st.write("Commands:", [c["command"] for c in st.session_state.commands])
+        #st.write("Commands:", [c["command"] for c in st.session_state.commands])
         #st.write(f"Command submitted: {chosen_command}")
         #if chosen_command == "Margin for Structure":
             #st.write("Margins:", margins)

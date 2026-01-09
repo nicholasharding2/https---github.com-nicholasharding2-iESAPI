@@ -61,7 +61,7 @@ def build_remove_empty_command(
     :rtype: dict
     """
     
-    if len(exclusion_list)>1:
+    if len(exclusion_list)>0:
         readable = f"Remove all empty structures except {','.join(exclusion_list)}"
     else:
         readable = "Remove all empty structures."
